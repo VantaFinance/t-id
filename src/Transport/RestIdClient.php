@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as Normalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\TId\IdClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\TId\Response\AuthIntrospectInfo;
 use Vanta\Integration\TId\Response\PairKey;
 use Vanta\Integration\TId\Response\UserInfo;
 use Yiisoft\Http\Method;
@@ -72,6 +73,23 @@ final readonly class RestIdClient implements IdClient
                 UserInfo::class => ['raw_value' => $response],
             ],
         ]);
+    }
 
+    public function getAuthIntrospectInfo(string $accessToken): AuthIntrospectInfo
+    {
+        $request = new Request(
+            Method::POST,
+            '/auth/introspect',
+            [
+                'Authorization' => 'Basic ' . base64_encode($this->configurationClient->clientId . ':' . $this->configurationClient->clientSecret),
+                'Accept'        => 'application/json',
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+            ],
+            http_build_query(['token' => $accessToken]),
+        );
+
+        $response = $this->client->sendRequest($request)->getBody()->__toString();
+
+        return $this->serializer->deserialize($response, AuthIntrospectInfo::class, 'json');
     }
 }
