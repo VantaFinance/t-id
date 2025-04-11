@@ -1,0 +1,81 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Vanta\Integration\TId\Infrastructure\Serializer\Normalizer;
+
+use Brick\PhoneNumber\PhoneNumber;
+use Brick\PhoneNumber\PhoneNumberException;
+use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface as Normalizer;
+use Webmozart\Assert\Assert;
+
+final readonly class PhoneNumberNormalizer implements Denormalizer, Normalizer
+{
+    /**
+     * @param non-empty-string|null $format
+     *
+     * @return non-empty-array<class-string<PhoneNumber>, true>
+     */
+    public function getSupportedTypes(?string $format): array
+    {
+        return [PhoneNumber::class => true];
+    }
+
+    /**
+     * @param class-string<PhoneNumber>                      $type
+     * @param non-empty-string|null                          $format
+     * @param array{deserialization_path?: non-empty-string} $context
+     */
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): PhoneNumber
+    {
+        try {
+            Assert::stringNotEmpty($data);
+
+            return PhoneNumber::parse($data, 'RU');
+        } catch (PhoneNumberException $e) {
+            throw NotNormalizableValueException::createForUnexpectedDataType(
+                $e->getMessage(),
+                $data,
+                [Type::BUILTIN_TYPE_STRING],
+                $context['deserialization_path'] ?? null,
+                true
+            );
+        }
+    }
+
+    /**
+     * @param non-empty-string|null $type
+     * @param non-empty-string|null $format
+     * @param array<string, mixed>  $context
+     */
+    public function supportsDenormalization(mixed $data, ?string $type = null, ?string $format = null, array $context = []): bool
+    {
+        return PhoneNumber::class === $type;
+    }
+
+    /**
+     * @param non-empty-string|null $format
+     * @param array<string, mixed>  $context
+     */
+    public function normalize(mixed $object, ?string $format = null, array $context = []): string
+    {
+        if (!$object instanceof PhoneNumber) {
+            throw new UnexpectedValueException(sprintf('Allowed type: %s', PhoneNumber::class));
+        }
+
+        return $object->jsonSerialize();
+    }
+
+    /**
+     * @param non-empty-string|null $format
+     * @param array<string, mixed>  $context
+     */
+    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
+    {
+        return $data instanceof PhoneNumber;
+    }
+}

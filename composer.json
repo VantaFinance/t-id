@@ -1,0 +1,54 @@
+{
+    "name": "vanta/t-id-client",
+    "description": "Pure client for t id",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dmitry Kaufman",
+            "email": "d.kaufman@pos-credit.ru"
+        },
+        {
+            "name": "Vanta Team",
+            "homepage": "https://vanta.ru"
+        }
+    ],
+    "keywords": [
+        "t id",
+        "t bank",
+        "t"
+    ],
+    "autoload": {
+        "psr-4": {
+            "Vanta\\Integration\\TId\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "yiisoft/http": "^1.2",
+        "psr/http-client": "^1.0",
+        "guzzlehttp/psr7": "^2.0",
+        "symfony/serializer": "^6.4|^7.0",
+        "symfony/property-access": "^6.4|^7.0",
+        "phpstan/phpdoc-parser": "^1.0",
+        "phpdocumentor/reflection-docblock": "^5.0",
+        "psr/http-client-implementation": "^1.0",
+        "symfony/uid": "^6.4|^7.0",
+        "symfony/intl": "^6.4|^7.0",
+        "brick/phonenumber": "^0.4|^0.5|^0.6",
+        "webmozart/assert": "^1.11"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.4|^7.0",
+        "friendsofphp/php-cs-fixer": "^3.17",
+        "guzzlehttp/guzzle": "^7.7",
+        "symfony/http-client": "^6.4|^7.0",
+        "phpstan/phpstan": "^1.10",
+        "nyholm/psr7": "^1.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true
+        }
+    }
+}
