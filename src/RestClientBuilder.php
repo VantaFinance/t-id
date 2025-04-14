@@ -11,12 +11,13 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder as JsonEncoderSymfony;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
-use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\Serializer as SymfonySerializer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\TId\Builder\AuthorizationUrlBuilder;
@@ -26,7 +27,6 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\ClientErrorMiddle
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\Middleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\PipelineMiddleware;
-use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\UrlMiddleware;
 use Vanta\Integration\TId\Infrastructure\Serializer\Normalizer\PhoneNumberNormalizer;
 use Vanta\Integration\TId\Transport\RestBusinessClient;
 use Vanta\Integration\TId\Transport\RestIdClient;
@@ -49,7 +49,7 @@ final readonly class RestClientBuilder
         $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $objectNormalizer     = new ObjectNormalizer(
             $classMetadataFactory,
-            new MetadataAwareNameConverter($classMetadataFactory, new CamelCaseToSnakeCaseNameConverter()),
+            new MetadataAwareNameConverter($classMetadataFactory),
             null,
             new PropertyInfoExtractor(
                 [],
@@ -66,11 +66,12 @@ final readonly class RestClientBuilder
             new UidNormalizer(),
             new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => '!Y-m-d']),
             new PhoneNumberNormalizer(),
+            new UnwrappingDenormalizer(),
             $objectNormalizer,
+            new ArrayDenormalizer(),
         ];
 
         $middlewares = [
-            new UrlMiddleware(),
             new ClientErrorMiddleware(),
             new InternalServerMiddleware(),
         ];
@@ -145,7 +146,8 @@ final readonly class RestClientBuilder
                 $this->configuration,
                 new PipelineMiddleware($this->middlewares, $this->client),
             ),
-            $this->serializer
+            $this->serializer,
+            $this->configuration
         );
     }
 

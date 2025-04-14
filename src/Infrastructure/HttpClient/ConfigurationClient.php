@@ -9,12 +9,14 @@ final readonly class ConfigurationClient
     /**
      * @param non-empty-string $clientId
      * @param non-empty-string $clientSecret
-     * @param non-empty-string $url
+     * @param non-empty-string $idClientUrl
+     * @param non-empty-string $businessClientUrl
      */
     public function __construct(
         public string $clientId,
         public string $clientSecret,
-        public string $url,
+        public string $idClientUrl,
+        public string $businessClientUrl,
     ) {
     }
 
@@ -26,7 +28,8 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $clientId,
             clientSecret: $this->clientSecret,
-            url: $this->url,
+            idClientUrl: $this->idClientUrl,
+            businessClientUrl: $this->businessClientUrl,
         );
     }
 
@@ -38,19 +41,34 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $this->clientId,
             clientSecret: $clientSecret,
-            url: $this->url,
+            idClientUrl: $this->idClientUrl,
+            businessClientUrl: $this->businessClientUrl,
         );
     }
 
     /**
-     * @param non-empty-string $url
+     * @param non-empty-string $idClientUrl
      */
-    public function withUrl(string $url): self
+    public function withIdClientUrl(string $idClientUrl): self
     {
         return new self(
             clientId: $this->clientId,
             clientSecret: $this->clientSecret,
-            url: $url,
+            idClientUrl: $idClientUrl,
+            businessClientUrl: $this->businessClientUrl,
+        );
+    }
+
+    /**
+     * @param non-empty-string $businessClientUrl
+     */
+    public function withBusinessClientUrl(string $businessClientUrl): self
+    {
+        return new self(
+            clientId: $this->clientId,
+            clientSecret: $this->clientSecret,
+            idClientUrl: $this->idClientUrl,
+            businessClientUrl: $businessClientUrl,
         );
     }
 }

@@ -17,16 +17,14 @@ final readonly class Address
      * @param non-empty-string|null $fiasCode
      * @param non-empty-string|null $house      - номер дома
      * @param non-empty-string|null $housing    - корпус
-     * @param non-empty-string|null $latitude
-     * @param non-empty-string|null $longitude
      * @param non-empty-string|null $region
      * @param non-empty-string|null $settlement - населенный пункт
      * @param non-empty-string|null $street
      * @param non-empty-string|null $zipCode
      */
     public function __construct(
-        public AdressType $addressType,
-        public bool $primary,
+        public ?AdressType $addressType = null,
+        public ?bool $primary = null,
         public ?string $apartment = null,
         public ?string $building = null,
         public ?string $city = null,
@@ -36,8 +34,8 @@ final readonly class Address
         public ?string $fiasCode = null,
         public ?string $house = null,
         public ?string $housing = null,
-        public ?string $latitude = null,
-        public ?string $longitude = null,
+        public ?float $latitude = null,
+        public ?float $longitude = null,
         public ?string $region = null,
         public ?string $settlement = null,
         public ?string $street = null,

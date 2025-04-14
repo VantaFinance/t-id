@@ -106,7 +106,7 @@ final readonly class AuthorizationUrlBuilder
         $query = array_filter($query, static fn ($value) => null !== $value);
 
         return sprintf(
-            '%s?%s',
+            '%s/auth/authorize?%s',
             $this->baseUri,
             http_build_query($query)
         );

@@ -34,7 +34,7 @@ final readonly class RestIdClient implements IdClient
 
         $request = new Request(
             Method::POST,
-            '/auth/token',
+            $this->configurationClient->idClientUrl . '/auth/token',
             [
                 'Authorization' => 'Basic ' . base64_encode($this->configurationClient->clientId . ':' . $this->configurationClient->clientSecret),
                 'Accept'        => 'application/json',
@@ -56,8 +56,8 @@ final readonly class RestIdClient implements IdClient
         ];
 
         $request = new Request(
-            Method::GET,
-            '/userinfo/userinfo',
+            Method::POST,
+            $this->configurationClient->idClientUrl . '/userinfo/userinfo',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -70,7 +70,7 @@ final readonly class RestIdClient implements IdClient
 
         return $this->serializer->deserialize($response, UserInfo::class, 'json', [
             Normalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                UserInfo::class => ['raw_value' => $response],
+                UserInfo::class => ['rawValue' => $response],
             ],
         ]);
     }
@@ -79,7 +79,7 @@ final readonly class RestIdClient implements IdClient
     {
         $request = new Request(
             Method::POST,
-            '/auth/introspect',
+            $this->configurationClient->idClientUrl . '/auth/introspect',
             [
                 'Authorization' => 'Basic ' . base64_encode($this->configurationClient->clientId . ':' . $this->configurationClient->clientSecret),
                 'Accept'        => 'application/json',

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vanta\Integration\TId\Response;
 
 use DateTimeImmutable;
+use Vanta\Integration\TId\Struct\DocumentType;
 
 final readonly class DocumentInfo
 {
@@ -17,10 +18,10 @@ final readonly class DocumentInfo
      * @param non-empty-string|null $serialNumber
      * @param non-empty-string|null $unitCode
      * @param non-empty-string|null $unitName
-     * @param non-empty-string|null $idType
      */
     public function __construct(
         public string $rawValue,
+        public DocumentType $idType,
         public ?DateTimeImmutable $birthDate = null,
         public ?string $birthPlace = null,
         public ?string $citizenship = null,
@@ -33,7 +34,6 @@ final readonly class DocumentInfo
         public ?string $unitCode = null,
         public ?string $unitName = null,
         public ?DateTimeImmutable $validTo = null,
-        public ?string $idType = null,
     ) {
     }
 }

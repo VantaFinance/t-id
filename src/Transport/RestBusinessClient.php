@@ -12,12 +12,14 @@ use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Vanta\Integration\TId\BusinessClient;
+use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
 use Vanta\Integration\TId\Response\DocumentInfo;
+use Vanta\Integration\TId\Response\InnNumber;
+use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
 use Vanta\Integration\TId\Struct\AdressType;
 use Vanta\Integration\TId\Struct\DocumentType;
-use Vanta\Integration\TId\Struct\InnNumber;
-use Vanta\Integration\TId\Struct\SnilsNumber;
 use Yiisoft\Http\Method;
 
 final readonly class RestBusinessClient implements BusinessClient
@@ -25,6 +27,7 @@ final readonly class RestBusinessClient implements BusinessClient
     public function __construct(
         private HttpClient $client,
         private Serializer $serializer,
+        private ConfigurationClient $configurationClient,
     ) {
     }
 
@@ -32,7 +35,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/documents/passport?' . http_build_query(['idType' => $documentType]),
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/passport?' . http_build_query(['idType' => $documentType->value]),
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -40,20 +43,32 @@ final readonly class RestBusinessClient implements BusinessClient
             ],
         );
 
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
+        $response = $this->client->sendRequest($request);
 
-        return $this->serializer->deserialize($response, DocumentInfo::class, 'json', [
+        $responseContent = $response->getBody()->getContents();
+
+        if ('{}' == $responseContent) {
+            throw NotFoundException::create($response, $request);
+        }
+
+        return $this->serializer->deserialize($responseContent, DocumentInfo::class, 'json', [
             Normalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                DocumentInfo::class => ['raw_value' => $response],
+                DocumentInfo::class => ['rawValue' => $responseContent],
             ],
         ]);
     }
 
-    public function getAdressInfo(string $accessToken, AdressType $adressType = AdressType::REGISTRATION_ADDRESS, Uuid $requestId = new UuidV7()): array
+    public function getAddressInfo(string $accessToken, ?AdressType $addressType = null, Uuid $requestId = new UuidV7()): array
     {
+        $uri = $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/addresses';
+
+        if (null != $addressType) {
+            $uri .= '?' . http_build_query(['addressType' => $addressType->value]);
+        }
+
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/addresses?' . http_build_query(['addressType' => $adressType]),
+            $uri,
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -65,7 +80,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
         /** @var list<Address> $result */
         $result = $this->serializer->deserialize($response, Address::class . '[]', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'addresses',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[addresses]',
         ]);
 
         return $result;
@@ -74,8 +89,8 @@ final readonly class RestBusinessClient implements BusinessClient
     public function getPassportCheckSmevResult(string $accessToken, Uuid $requestId = new UuidV7()): bool
     {
         $request = new Request(
-            Method::GET,
-            '/openapi/api/v1/individual/documents/passport-check-smev4',
+            Method::POST,
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/passport-check-smev4',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -86,7 +101,7 @@ final readonly class RestBusinessClient implements BusinessClient
         $response = $this->client->sendRequest($request)->getBody()->__toString();
 
         return 'VALID' == $this->serializer->deserialize($response, 'string', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'result',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[result]',
         ]);
     }
 
@@ -94,7 +109,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/documents/inn',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/inn',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -104,16 +119,14 @@ final readonly class RestBusinessClient implements BusinessClient
 
         $response = $this->client->sendRequest($request)->getBody()->__toString();
 
-        return $this->serializer->deserialize($response, InnNumber::class, 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'inn',
-        ]);
+        return $this->serializer->deserialize($response, InnNumber::class, 'json');
     }
 
     public function getSnils(string $accessToken, Uuid $requestId = new UuidV7()): SnilsNumber
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/documents/snils',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/snils',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -121,18 +134,22 @@ final readonly class RestBusinessClient implements BusinessClient
             ],
         );
 
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
+        $response = $this->client->sendRequest($request);
 
-        return $this->serializer->deserialize($response, SnilsNumber::class, 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'snils',
-        ]);
+        $responseContent = $response->getBody()->getContents();
+
+        if ('{}' == $responseContent) {
+            throw NotFoundException::create($response, $request);
+        }
+
+        return $this->serializer->deserialize($response, SnilsNumber::class, 'json');
     }
 
     public function getForeignAgent(string $accessToken): bool
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/foreignagent/status',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/foreignagent/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -143,7 +160,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
         /** @var bool $result */
         $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'isForeignAgent',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[isForeignAgent]',
         ]);
 
         return $result;
@@ -153,7 +170,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/blacklist/status',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/blacklist/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -164,7 +181,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
         /** @var bool $result */
         $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'isBlacklisted',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[isBlacklisted]',
         ]);
 
         return $result;
@@ -174,7 +191,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/identification/status',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/identification/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -185,7 +202,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
         /** @var bool $result */
         $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'isIdentified',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[isIdentified]',
         ]);
 
         return $result;
@@ -195,7 +212,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            '/openapi/api/v1/individual/pdl/status',
+            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/pdl/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -206,7 +223,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
         /** @var bool $result */
         $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => 'isPublicOfficialPerson',
+            UnwrappingDenormalizer::UNWRAP_PATH => '[isPublicOfficialPerson]',
         ]);
 
         return $result;

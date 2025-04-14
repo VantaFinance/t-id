@@ -8,11 +8,11 @@ use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Vanta\Integration\TId\Response\DocumentInfo;
+use Vanta\Integration\TId\Response\InnNumber;
+use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
 use Vanta\Integration\TId\Struct\AdressType;
 use Vanta\Integration\TId\Struct\DocumentType;
-use Vanta\Integration\TId\Struct\InnNumber;
-use Vanta\Integration\TId\Struct\SnilsNumber;
 
 interface BusinessClient
 {
@@ -30,7 +30,7 @@ interface BusinessClient
      *
      * @throws ClientException
      */
-    public function getAdressInfo(string $accessToken, AdressType $adressType = AdressType::REGISTRATION_ADDRESS, Uuid $requestId = new UuidV7()): array;
+    public function getAddressInfo(string $accessToken, ?AdressType $addressType = null, Uuid $requestId = new UuidV7()): array;
 
     /**
      * @param non-empty-string $accessToken
