@@ -138,7 +138,7 @@ final readonly class RestClientBuilder
             serializer: $this->serializer,
             configuration: $this->configuration,
             middlewaresIdApi: $middlewares,
-           middlewaresBusinessApi: $middlewares,
+            middlewaresBusinessApi: $middlewares,
         );
     }
 
