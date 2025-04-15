@@ -8,8 +8,6 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 
 final readonly class PairKey
 {
-    public const string SANDBOX_TOKEN = 'TBankSandboxToken';
-
     /**
      * @param non-empty-string $accessToken
      * @param non-empty-string $tokenType
@@ -26,5 +24,16 @@ final readonly class PairKey
         #[SerializedName('id_token')]
         public string $idToken,
     ) {
+    }
+
+    public static function createSandboxPairKey(): self
+    {
+        // первые 2 поля - по доке т банка, остальные поля добавил от себя
+        return new self(
+            'TBankSandboxToken',
+            'Bearer',
+            10000,
+            'someIdToken',
+        );
     }
 }

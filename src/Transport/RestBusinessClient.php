@@ -142,7 +142,7 @@ final readonly class RestBusinessClient implements BusinessClient
             throw NotFoundException::create($response, $request);
         }
 
-        return $this->serializer->deserialize($response, SnilsNumber::class, 'json');
+        return $this->serializer->deserialize($responseContent, SnilsNumber::class, 'json');
     }
 
     public function getForeignAgent(string $accessToken): bool

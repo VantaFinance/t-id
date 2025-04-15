@@ -9,7 +9,6 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 final readonly class AuthIntrospectInfo
 {
     /**
-     * @param non-empty-string|null       $active
      * @param list<non-empty-string>|null $scope
      * @param non-empty-string|null       $clientId
      * @param non-empty-string|null       $tokenType
@@ -21,7 +20,7 @@ final readonly class AuthIntrospectInfo
      * @param non-empty-string|null       $iss
      */
     public function __construct(
-        public ?string $active = null,
+        public ?bool $active = null,
         public ?array $scope = null,
         #[SerializedName('client_id')]
         public ?string $clientId = null,
