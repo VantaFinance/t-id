@@ -29,19 +29,19 @@ final readonly class PipelineMiddleware
         $middlewares = $this->middlewares;
         $middleware  = array_shift($middlewares);
 
+        // @todo выкосить echo
         if (null == $middleware) {
-            echo 'request: ' . $request->getUri()->__toString() . ' ' . $request->getBody()->getContents() . PHP_EOL;
+            echo 'request: ' . $request->getMethod() . ' ' . $request->getUri()->__toString() . ' ' . $request->getBody()->getContents() . PHP_EOL;
             $request->getBody()->rewind();
 
 
             $response = $this->client->sendRequest($request);
 
 
-            echo 'response: ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
+            echo 'response: ' . $response->getStatusCode() . ' ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
             $response->getBody()->rewind();
 
             return $response;
-
         }
 
         return $middleware->process($request, $configuration, [new self($middlewares, $this->client), 'process']);

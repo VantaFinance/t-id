@@ -16,7 +16,6 @@ final readonly class AuthIntrospectInfo
      * @param positive-int|null           $iat
      * @param non-empty-string|null       $sub
      * @param array<string>|null          $aud
-     * @param non-empty-string|null       $ibsme
      * @param non-empty-string|null       $iss
      */
     public function __construct(
@@ -30,7 +29,6 @@ final readonly class AuthIntrospectInfo
         public ?int $iat = null,
         public ?string $sub = null,
         public ?array $aud = null,
-        public ?string $ibsme = null,
         public ?string $iss = null,
     ) {
     }
