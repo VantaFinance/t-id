@@ -9,14 +9,14 @@ final readonly class ConfigurationClient
     /**
      * @param non-empty-string $clientId
      * @param non-empty-string $clientSecret
-     * @param non-empty-string $idClientUrl
-     * @param non-empty-string $businessClientUrl
+     * @param non-empty-string $idApiUrl
+     * @param non-empty-string $businessApiUrl
      */
     public function __construct(
         public string $clientId,
         public string $clientSecret,
-        public string $idClientUrl,
-        public string $businessClientUrl,
+        public string $idApiUrl,
+        public string $businessApiUrl,
     ) {
     }
 
@@ -28,8 +28,8 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $clientId,
             clientSecret: $this->clientSecret,
-            idClientUrl: $this->idClientUrl,
-            businessClientUrl: $this->businessClientUrl,
+            idApiUrl: $this->idApiUrl,
+            businessApiUrl: $this->businessApiUrl,
         );
     }
 
@@ -41,8 +41,8 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $this->clientId,
             clientSecret: $clientSecret,
-            idClientUrl: $this->idClientUrl,
-            businessClientUrl: $this->businessClientUrl,
+            idApiUrl: $this->idApiUrl,
+            businessApiUrl: $this->businessApiUrl,
         );
     }
 
@@ -54,8 +54,8 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $this->clientId,
             clientSecret: $this->clientSecret,
-            idClientUrl: $idClientUrl,
-            businessClientUrl: $this->businessClientUrl,
+            idApiUrl: $idClientUrl,
+            businessApiUrl: $this->businessApiUrl,
         );
     }
 
@@ -67,8 +67,8 @@ final readonly class ConfigurationClient
         return new self(
             clientId: $this->clientId,
             clientSecret: $this->clientSecret,
-            idClientUrl: $this->idClientUrl,
-            businessClientUrl: $businessClientUrl,
+            idApiUrl: $this->idApiUrl,
+            businessApiUrl: $businessClientUrl,
         );
     }
 }

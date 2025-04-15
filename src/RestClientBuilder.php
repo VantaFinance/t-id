@@ -27,6 +27,7 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\ClientErrorMiddle
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\Middleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\PipelineMiddleware;
+use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\UrlMiddleware;
 use Vanta\Integration\TId\Infrastructure\Serializer\Normalizer\PhoneNumberNormalizer;
 use Vanta\Integration\TId\Transport\RestBusinessClient;
 use Vanta\Integration\TId\Transport\RestIdClient;
@@ -34,13 +35,15 @@ use Vanta\Integration\TId\Transport\RestIdClient;
 final readonly class RestClientBuilder
 {
     /**
-     * @param non-empty-list<Middleware> $middlewares
+     * @param non-empty-list<Middleware> $middlewaresIdApi
+     * @param non-empty-list<Middleware> $middlewaresBusinessApi
      */
     private function __construct(
         private PsrHttpClient $client,
         public Serializer $serializer,
         private ConfigurationClient $configuration,
-        private array $middlewares,
+        private array $middlewaresIdApi,
+        private array $middlewaresBusinessApi,
     ) {
     }
 
@@ -71,16 +74,24 @@ final readonly class RestClientBuilder
             new ArrayDenormalizer(),
         ];
 
-        $middlewares = [
+        $middlewaresIdApi = [
             new ClientErrorMiddleware(),
             new InternalServerMiddleware(),
+            new UrlMiddleware($configuration->idApiUrl),
+        ];
+
+        $middlewaresBusinessApi = [
+            new ClientErrorMiddleware(),
+            new InternalServerMiddleware(),
+            new UrlMiddleware($configuration->businessApiUrl),
         ];
 
         return new self(
             $client,
             new SymfonySerializer($normalizers, [new JsonEncoderSymfony()]),
             $configuration,
-            $middlewares
+            $middlewaresIdApi,
+            $middlewaresBusinessApi,
         );
     }
 
@@ -90,7 +101,8 @@ final readonly class RestClientBuilder
             client: $this->client,
             serializer: $serializer,
             configuration: $this->configuration,
-            middlewares: $this->middlewares
+            middlewaresIdApi: $this->middlewaresIdApi,
+            middlewaresBusinessApi: $this->middlewaresBusinessApi,
         );
     }
 
@@ -100,7 +112,8 @@ final readonly class RestClientBuilder
             client: $this->client,
             serializer: $this->serializer,
             configuration: $configuration,
-            middlewares: $this->middlewares
+            middlewaresIdApi: $this->middlewaresIdApi,
+            middlewaresBusinessApi: $this->middlewaresBusinessApi,
         );
     }
 
@@ -110,7 +123,8 @@ final readonly class RestClientBuilder
             client: $this->client,
             serializer: $this->serializer,
             configuration: $this->configuration,
-            middlewares: array_merge($this->middlewares, [$middleware])
+            middlewaresIdApi: array_merge($this->middlewaresIdApi, [$middleware]),
+            middlewaresBusinessApi: array_merge($this->middlewaresBusinessApi, [$middleware]),
         );
     }
 
@@ -123,7 +137,8 @@ final readonly class RestClientBuilder
             client: $this->client,
             serializer: $this->serializer,
             configuration: $this->configuration,
-            middlewares: $middlewares
+            middlewaresIdApi: $middlewares,
+           middlewaresBusinessApi: $middlewares,
         );
     }
 
@@ -132,7 +147,7 @@ final readonly class RestClientBuilder
         return new RestIdClient(
             new HttpClient(
                 $this->configuration,
-                new PipelineMiddleware($this->middlewares, $this->client),
+                new PipelineMiddleware($this->middlewaresIdApi, $this->client),
             ),
             $this->serializer,
             $this->configuration
@@ -144,10 +159,9 @@ final readonly class RestClientBuilder
         return new RestBusinessClient(
             new HttpClient(
                 $this->configuration,
-                new PipelineMiddleware($this->middlewares, $this->client),
+                new PipelineMiddleware($this->middlewaresBusinessApi, $this->client),
             ),
             $this->serializer,
-            $this->configuration
         );
     }
 
@@ -160,7 +174,7 @@ final readonly class RestClientBuilder
         return new AuthorizationUrlBuilder(
             $baseUri,
             $this->configuration->clientId,
-            $redirectUri
+            $redirectUri,
         );
     }
 }

@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Vanta\Integration\TId\BusinessClient;
-use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
 use Vanta\Integration\TId\Response\DocumentInfo;
 use Vanta\Integration\TId\Response\InnNumber;
@@ -27,7 +26,6 @@ final readonly class RestBusinessClient implements BusinessClient
     public function __construct(
         private HttpClient $client,
         private Serializer $serializer,
-        private ConfigurationClient $configurationClient,
     ) {
     }
 
@@ -35,7 +33,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/passport?' . http_build_query(['idType' => $documentType->value]),
+            '/openapi/api/v1/individual/documents/passport?' . http_build_query(['idType' => $documentType->value]),
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -60,7 +58,7 @@ final readonly class RestBusinessClient implements BusinessClient
 
     public function getAddressInfo(string $accessToken, ?AdressType $addressType = null, Uuid $requestId = new UuidV7()): array
     {
-        $uri = $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/addresses';
+        $uri = '/openapi/api/v1/individual/addresses';
 
         if (null != $addressType) {
             $uri .= '?' . http_build_query(['addressType' => $addressType->value]);
@@ -90,7 +88,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::POST,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/passport-check-smev4',
+            '/openapi/api/v1/individual/documents/passport-check-smev4',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -109,7 +107,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/inn',
+            '/openapi/api/v1/individual/documents/inn',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -126,7 +124,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/documents/snils',
+            '/openapi/api/v1/individual/documents/snils',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -149,7 +147,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/foreignagent/status',
+            '/openapi/api/v1/individual/foreignagent/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -170,7 +168,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/blacklist/status',
+            '/openapi/api/v1/individual/blacklist/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -191,7 +189,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/identification/status',
+            '/openapi/api/v1/individual/identification/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
@@ -212,7 +210,7 @@ final readonly class RestBusinessClient implements BusinessClient
     {
         $request = new Request(
             Method::GET,
-            $this->configurationClient->businessClientUrl . '/openapi/api/v1/individual/pdl/status',
+            '/openapi/api/v1/individual/pdl/status',
             [
                 'Authorization' => 'Bearer ' . $accessToken,
                 'Accept'        => 'application/json',
