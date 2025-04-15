@@ -27,7 +27,6 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\ClientErrorMiddle
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\InternalServerMiddleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\Middleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\PipelineMiddleware;
-use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\SandboxBusinessClientMiddleware;
 use Vanta\Integration\TId\Infrastructure\Serializer\Normalizer\PhoneNumberNormalizer;
 use Vanta\Integration\TId\Transport\RestBusinessClient;
 use Vanta\Integration\TId\Transport\RestIdClient;
