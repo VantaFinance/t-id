@@ -1,0 +1,12 @@
+{
+  "source": {
+    "directories": [
+      "src"
+    ]
+  },
+  "mutators": {
+    "@default": true
+  },
+  "testFramework": "phpunit",
+  "timeout": 20
+}

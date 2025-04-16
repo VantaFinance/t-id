@@ -4,3 +4,6 @@ phpunit.xml.dist        export-ignore
 tests                   export-ignore
 .php-cs-fixer.dist.php  export-ignore
 .github                 export-ignore
+tests                   export-ignore
+infection.json.dist     export-ignore
+phpunit.xsd
