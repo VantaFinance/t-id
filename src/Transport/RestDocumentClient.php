@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Vanta\Integration\TId\BusinessClient;
+use Vanta\Integration\TId\DocumentClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
 use Vanta\Integration\TId\Response\DocumentInfo;
 use Vanta\Integration\TId\Response\InnNumber;
@@ -21,7 +21,7 @@ use Vanta\Integration\TId\Struct\AdressType;
 use Vanta\Integration\TId\Struct\DocumentType;
 use Yiisoft\Http\Method;
 
-final readonly class RestBusinessClient implements BusinessClient
+final readonly class RestDocumentClient implements DocumentClient
 {
     public function __construct(
         private HttpClient $client,
@@ -141,89 +141,5 @@ final readonly class RestBusinessClient implements BusinessClient
         }
 
         return $this->serializer->deserialize($responseContent, SnilsNumber::class, 'json');
-    }
-
-    public function getForeignAgent(string $accessToken): bool
-    {
-        $request = new Request(
-            Method::GET,
-            '/openapi/api/v1/individual/foreignagent/status',
-            [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Accept'        => 'application/json',
-            ],
-        );
-
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
-
-        /** @var bool $result */
-        $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[isForeignAgent]',
-        ]);
-
-        return $result;
-    }
-
-    public function getBanksBlackListStatus(string $accessToken): bool
-    {
-        $request = new Request(
-            Method::GET,
-            '/openapi/api/v1/individual/blacklist/status',
-            [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Accept'        => 'application/json',
-            ],
-        );
-
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
-
-        /** @var bool $result */
-        $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[isBlacklisted]',
-        ]);
-
-        return $result;
-    }
-
-    public function getIdentificationStatus(string $accessToken): bool
-    {
-        $request = new Request(
-            Method::GET,
-            '/openapi/api/v1/individual/identification/status',
-            [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Accept'        => 'application/json',
-            ],
-        );
-
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
-
-        /** @var bool $result */
-        $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[isIdentified]',
-        ]);
-
-        return $result;
-    }
-
-    public function getPublicOfficialPersonStatus(string $accessToken): bool
-    {
-        $request = new Request(
-            Method::GET,
-            '/openapi/api/v1/individual/pdl/status',
-            [
-                'Authorization' => 'Bearer ' . $accessToken,
-                'Accept'        => 'application/json',
-            ],
-        );
-
-        $response = $this->client->sendRequest($request)->getBody()->__toString();
-
-        /** @var bool $result */
-        $result = $this->serializer->deserialize($response, 'bool', 'json', [
-            UnwrappingDenormalizer::UNWRAP_PATH => '[isPublicOfficialPerson]',
-        ]);
-
-        return $result;
     }
 }

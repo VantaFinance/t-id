@@ -14,7 +14,7 @@ use Vanta\Integration\TId\Struct\Address;
 use Vanta\Integration\TId\Struct\AdressType;
 use Vanta\Integration\TId\Struct\DocumentType;
 
-interface BusinessClient
+interface DocumentClient
 {
     /**
      * @param non-empty-string $accessToken
@@ -52,30 +52,4 @@ interface BusinessClient
      * @throws ClientException
      */
     public function getSnils(string $accessToken, Uuid $requestId = new UuidV7()): SnilsNumber;
-
-    /**
-     * @param non-empty-string $accessToken
-     *
-     * @throws ClientException
-     */
-    public function getForeignAgent(string $accessToken): bool;
-
-    /**
-     * @param non-empty-string $accessToken
-     *
-     * @throws ClientException
-     */
-    public function getBanksBlackListStatus(string $accessToken): bool;
-
-    /**
-     * @param non-empty-string $accessToken
-     *
-     * @throws ClientException
-     */
-    public function getIdentificationStatus(string $accessToken): bool;
-
-    /**
-     * @param non-empty-string $accessToken
-     */
-    public function getPublicOfficialPersonStatus(string $accessToken): bool;
 }
