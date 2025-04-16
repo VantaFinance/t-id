@@ -7,7 +7,7 @@ namespace Vanta\Integration\TId\Response;
 use DateTimeImmutable;
 use Vanta\Integration\TId\Struct\DocumentType;
 
-final readonly class DocumentInfo
+final readonly class Document
 {
     /**
      * @param non-empty-string      $rawValue

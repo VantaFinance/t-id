@@ -11,6 +11,7 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\BadRequestExceptio
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\ForbiddenException;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\UnauthorizedException;
+use Yiisoft\Http\Method;
 use Yiisoft\Http\Status;
 
 final readonly class ClientErrorMiddleware implements Middleware
@@ -34,6 +35,14 @@ final readonly class ClientErrorMiddleware implements Middleware
 
         if ($statusCode >= Status::BAD_REQUEST && $statusCode <= Status::UNAVAILABLE_FOR_LEGAL_REASONS) {
             throw BadRequestException::create($response, $request);
+        }
+
+        $responseContent = $response->getBody()->getContents();
+        $response->getBody()->rewind();
+
+        // бывает при getSnils и getDocument
+        if (Method::GET == $request->getMethod() && '{}' == $responseContent) {
+            throw NotFoundException::create($response, $request);
         }
 
         return $response;

@@ -12,8 +12,7 @@ use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 use Vanta\Integration\TId\DocumentClient;
-use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
-use Vanta\Integration\TId\Response\DocumentInfo;
+use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Response\InnNumber;
 use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
@@ -29,7 +28,7 @@ final readonly class RestDocumentClient implements DocumentClient
     ) {
     }
 
-    public function getDocumentInfo(string $accessToken, DocumentType $documentType = DocumentType::PASSPORT, Uuid $requestId = new UuidV7()): DocumentInfo
+    public function getDocument(string $accessToken, DocumentType $documentType = DocumentType::PASSPORT, Uuid $requestId = new UuidV7()): Document
     {
         $request = new Request(
             Method::GET,
@@ -45,13 +44,9 @@ final readonly class RestDocumentClient implements DocumentClient
 
         $responseContent = $response->getBody()->getContents();
 
-        if ('{}' == $responseContent) {
-            throw NotFoundException::create($response, $request);
-        }
-
-        return $this->serializer->deserialize($responseContent, DocumentInfo::class, 'json', [
+        return $this->serializer->deserialize($responseContent, Document::class, 'json', [
             Normalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                DocumentInfo::class => ['rawValue' => $responseContent],
+                Document::class => ['rawValue' => $responseContent],
             ],
         ]);
     }
@@ -135,10 +130,6 @@ final readonly class RestDocumentClient implements DocumentClient
         $response = $this->client->sendRequest($request);
 
         $responseContent = $response->getBody()->getContents();
-
-        if ('{}' == $responseContent) {
-            throw NotFoundException::create($response, $request);
-        }
 
         return $this->serializer->deserialize($responseContent, SnilsNumber::class, 'json');
     }

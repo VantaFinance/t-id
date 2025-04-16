@@ -7,7 +7,7 @@ namespace Vanta\Integration\TId;
 use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
-use Vanta\Integration\TId\Response\DocumentInfo;
+use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Response\InnNumber;
 use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
@@ -21,7 +21,7 @@ interface DocumentClient
      *
      * @throws ClientException
      */
-    public function getDocumentInfo(string $accessToken, DocumentType $documentType = DocumentType::PASSPORT, Uuid $requestId = new UuidV7()): DocumentInfo;
+    public function getDocument(string $accessToken, DocumentType $documentType = DocumentType::PASSPORT, Uuid $requestId = new UuidV7()): Document;
 
     /**
      * @param non-empty-string $accessToken
