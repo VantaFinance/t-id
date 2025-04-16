@@ -9,22 +9,21 @@ use DateTimeImmutable;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Vanta\Integration\TId\Struct\Gender;
 
-// @todo однообразный нейминг ответов: info/не info
-
-final readonly class UserInfo
+final readonly class User
 {
     /**
      * @param non-empty-string      $rawValue
-     * @param non-empty-string      $sub        - идентификатор авторизированного пользователя
-     * @param non-empty-string|null $name       - в доке т банка сказано: фамилия, имя
-     * @param non-empty-string|null $familyName - фамилия
-     * @param non-empty-string|null $givenName  - имя
-     * @param non-empty-string|null $middleName - отчество
+     * @param non-empty-string      $sub                    - идентификатор авторизированного пользователя
+     * @param non-empty-string|null $familyNameAndGivenName - в доке т банка сказано: фамилия, имя
+     * @param non-empty-string|null $familyName             - фамилия
+     * @param non-empty-string|null $givenName              - имя
+     * @param non-empty-string|null $middleName             - отчество
      */
     public function __construct(
         public string $rawValue,
         public string $sub,
-        public ?string $name = null, // @todo переименовать на firstNameAndName? Или какие термины чаще встречаются в системе?
+        #[SerializedName('name')]
+        public ?string $familyNameAndGivenName = null,
         public ?Gender $gender = null,
         public ?DateTimeImmutable $birthdate = null,
         #[SerializedName('family_name')]

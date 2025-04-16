@@ -10,9 +10,9 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as Normalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Vanta\Integration\TId\IdClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
-use Vanta\Integration\TId\Response\AuthIntrospectInfo;
+use Vanta\Integration\TId\Response\AuthIntrospect;
 use Vanta\Integration\TId\Response\PairKey;
-use Vanta\Integration\TId\Response\UserInfo;
+use Vanta\Integration\TId\Response\User;
 use Yiisoft\Http\Method;
 
 final readonly class RestIdClient implements IdClient
@@ -48,7 +48,7 @@ final readonly class RestIdClient implements IdClient
         return $this->serializer->deserialize($response, PairKey::class, 'json');
     }
 
-    public function getUserInfo(string $accessToken): UserInfo
+    public function getUser(string $accessToken): User
     {
         $requestData = [
             'client_id'     => $this->configurationClient->clientId,
@@ -68,14 +68,14 @@ final readonly class RestIdClient implements IdClient
 
         $response = $this->client->sendRequest($request)->getBody()->__toString();
 
-        return $this->serializer->deserialize($response, UserInfo::class, 'json', [
+        return $this->serializer->deserialize($response, User::class, 'json', [
             Normalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                UserInfo::class => ['rawValue' => $response],
+                User::class => ['rawValue' => $response],
             ],
         ]);
     }
 
-    public function getAuthIntrospectInfo(string $accessToken): AuthIntrospectInfo
+    public function getAuthIntrospect(string $accessToken): AuthIntrospect
     {
         $request = new Request(
             Method::POST,
@@ -90,6 +90,6 @@ final readonly class RestIdClient implements IdClient
 
         $response = $this->client->sendRequest($request)->getBody()->__toString();
 
-        return $this->serializer->deserialize($response, AuthIntrospectInfo::class, 'json');
+        return $this->serializer->deserialize($response, AuthIntrospect::class, 'json');
     }
 }

@@ -6,7 +6,7 @@ namespace Vanta\Integration\TId\Response;
 
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
-final readonly class AuthIntrospectInfo
+final readonly class AuthIntrospect
 {
     /**
      * @param list<non-empty-string>|null $scope

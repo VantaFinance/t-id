@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Vanta\Integration\TId;
 
 use Psr\Http\Client\ClientExceptionInterface as ClientException;
-use Vanta\Integration\TId\Response\AuthIntrospectInfo;
+use Vanta\Integration\TId\Response\AuthIntrospect;
 use Vanta\Integration\TId\Response\PairKey;
-use Vanta\Integration\TId\Response\UserInfo;
+use Vanta\Integration\TId\Response\User;
 
 interface IdClient
 {
@@ -24,12 +24,12 @@ interface IdClient
      *
      * @throws ClientException
      */
-    public function getUserInfo(string $accessToken): UserInfo;
+    public function getUser(string $accessToken): User;
 
     /**
      * @param non-empty-string $accessToken
      *
      * @throws ClientException
      */
-    public function getAuthIntrospectInfo(string $accessToken): AuthIntrospectInfo;
+    public function getAuthIntrospect(string $accessToken): AuthIntrospect;
 }
