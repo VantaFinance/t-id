@@ -1,0 +1,14 @@
+parameters:
+    level: 9
+    tmpDir: var
+    paths:
+        - src
+    excludePaths:
+        - vendor
+    exceptions:
+        implicitThrows: true
+        check:
+            tooWideThrowType: true
+
+    parallel:
+        maximumNumberOfProcesses: 4
