@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\TId\Struct;
 
-enum AdressType: string
+enum AddressType: string
 {
     /**
      * Адрес регистрации

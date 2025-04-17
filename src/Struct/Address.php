@@ -23,7 +23,7 @@ final readonly class Address
      * @param non-empty-string|null $zipCode
      */
     public function __construct(
-        public AdressType $addressType,
+        public AddressType $addressType,
         public bool $primary,
         public ?string $apartment = null,
         public ?string $building = null,

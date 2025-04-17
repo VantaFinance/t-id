@@ -96,6 +96,17 @@ final readonly class RestClientBuilder
         );
     }
 
+    public function withClient(PsrHttpClient $client): self
+    {
+        return new self(
+            client: $client,
+            serializer: $this->serializer,
+            configuration: $this->configuration,
+            middlewaresIdApi: $this->middlewaresIdApi,
+            middlewaresBusinessApi: $this->middlewaresBusinessApi,
+        );
+    }
+
     public function withSerializer(Serializer $serializer): self
     {
         return new self(

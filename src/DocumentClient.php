@@ -11,7 +11,7 @@ use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Response\InnNumber;
 use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
-use Vanta\Integration\TId\Struct\AdressType;
+use Vanta\Integration\TId\Struct\AddressType;
 use Vanta\Integration\TId\Struct\DocumentType;
 
 interface DocumentClient
@@ -30,7 +30,7 @@ interface DocumentClient
      *
      * @throws ClientException
      */
-    public function getAddressInfo(string $accessToken, ?AdressType $addressType = null, Uuid $requestId = new UuidV7()): array;
+    public function getAddress(string $accessToken, ?AddressType $addressType = null, Uuid $requestId = new UuidV7()): array;
 
     /**
      * @param non-empty-string $accessToken

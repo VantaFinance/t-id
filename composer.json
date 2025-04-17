@@ -22,6 +22,14 @@
             "Vanta\\Integration\\TId\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Vanta\\Integration\\TId\\Tests\\": "tests/"
+        },
+        "files": [
+            "tests/function.php"
+        ]
+    },
     "require": {
         "php": "^8.3",
         "yiisoft/http": "^1.2",

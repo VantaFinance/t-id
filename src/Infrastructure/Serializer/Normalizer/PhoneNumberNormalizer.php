@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalize
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface as Normalizer;
 use Webmozart\Assert\Assert;
 
-final readonly class PhoneNumberNormalizer implements Denormalizer, Normalizer
+final readonly class PhoneNumberNormalizer implements Denormalizer
 {
     /**
      * @param non-empty-string|null $format
@@ -55,27 +55,5 @@ final readonly class PhoneNumberNormalizer implements Denormalizer, Normalizer
     public function supportsDenormalization(mixed $data, ?string $type = null, ?string $format = null, array $context = []): bool
     {
         return PhoneNumber::class === $type;
-    }
-
-    /**
-     * @param non-empty-string|null $format
-     * @param array<string, mixed>  $context
-     */
-    public function normalize(mixed $object, ?string $format = null, array $context = []): string
-    {
-        if (!$object instanceof PhoneNumber) {
-            throw new UnexpectedValueException(sprintf('Allowed type: %s', PhoneNumber::class));
-        }
-
-        return $object->jsonSerialize();
-    }
-
-    /**
-     * @param non-empty-string|null $format
-     * @param array<string, mixed>  $context
-     */
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
-    {
-        return $data instanceof PhoneNumber;
     }
 }

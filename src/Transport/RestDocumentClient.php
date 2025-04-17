@@ -16,7 +16,7 @@ use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Response\InnNumber;
 use Vanta\Integration\TId\Response\SnilsNumber;
 use Vanta\Integration\TId\Struct\Address;
-use Vanta\Integration\TId\Struct\AdressType;
+use Vanta\Integration\TId\Struct\AddressType;
 use Vanta\Integration\TId\Struct\DocumentType;
 use Yiisoft\Http\Method;
 
@@ -51,7 +51,7 @@ final readonly class RestDocumentClient implements DocumentClient
         ]);
     }
 
-    public function getAddressInfo(string $accessToken, ?AdressType $addressType = null, Uuid $requestId = new UuidV7()): array
+    public function getAddress(string $accessToken, ?AddressType $addressType = null, Uuid $requestId = new UuidV7()): array
     {
         $uri = '/openapi/api/v1/individual/addresses';
 
