@@ -40,7 +40,7 @@ final class RestIdClientTest extends TestCase
             new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
             new Client(['handler' => $mock]),
         )
-            ->createIdClient()
+            ->createUserClient()
             ->getPairKeyByAuthorizationCode('someCode', 'https://vanta.ru')
         ;
 
@@ -76,7 +76,7 @@ final class RestIdClientTest extends TestCase
             new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
             new Client(['handler' => $mock]),
         )
-            ->createIdClient()
+            ->createUserClient()
             ->getUser('someAccessToken')
         ;
 
@@ -116,7 +116,7 @@ final class RestIdClientTest extends TestCase
             new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
             new Client(['handler' => $mock]),
         )
-            ->createIdClient()
+            ->createUserClient()
             ->getAuthIntrospect('someAccessToken')
         ;
 
