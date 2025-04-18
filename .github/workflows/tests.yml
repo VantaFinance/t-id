@@ -17,7 +17,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer:v2, flex
-          coverage: none
+          coverage: xdebug
 
       - name: Install dependencies
         env:
