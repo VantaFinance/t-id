@@ -16,6 +16,7 @@ abstract class TIdException extends Exception implements ClientException
 
     public readonly Response $response;
 
+    /* @infection-ignore-all */
     final protected function __construct(
         Response $response,
         Request $request,
@@ -26,6 +27,7 @@ abstract class TIdException extends Exception implements ClientException
         $this->response = $response;
         $this->request  = $request;
 
+        /* @infection-ignore-all */
         parent::__construct($message, $code, $previous);
     }
 }

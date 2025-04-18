@@ -55,20 +55,14 @@ final readonly class RestClientBuilder
             $classMetadataFactory,
             new MetadataAwareNameConverter($classMetadataFactory),
             null,
-            new PropertyInfoExtractor(
-                [],
-                [new PhpStanExtractor()],
-                [],
-                [],
-                []
-            ),
+            new PropertyInfoExtractor(),
             new ClassDiscriminatorFromClassMetadata($classMetadataFactory),
         );
 
         $normalizers = [
             new BackedEnumNormalizer(),
             new UidNormalizer(),
-            new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => '!Y-m-d']),
+            new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => '!Y-m-d+']),
             new PhoneNumberNormalizer(),
             new UnwrappingDenormalizer(),
             $objectNormalizer,

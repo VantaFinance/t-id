@@ -45,12 +45,6 @@ use function PHPUnit\Framework\assertTrue;
 
 final class RestClientBuilderTest extends TestCase
 {
-
-    // @todo проверить, нет ли лишних тестов
-    // @todo полное покрытие
-    // @todo все ли тесты юнит
-
-
     public function testWithHttpClient(): void
     {
         $builder = RestClientBuilder::create(
@@ -153,8 +147,8 @@ final class RestClientBuilderTest extends TestCase
      * @param non-empty-string $expectExceptionClass
      * @throws ClientException
      */
-    #[DataProvider('clientErrorMiddlewareDataProvider')]
-    public function testClientErrorMiddleware(int $statusCode, string $responseContent, string $expectExceptionClass): void
+    #[DataProvider('errorMiddlewaresDataProvider')]
+    public function testErrorMiddlewares(int $statusCode, string $responseContent, callable $callable, string $expectExceptionClass): void
     {
         $mock = MockHandler::createWithMiddleware([
             static function () use ($statusCode, $responseContent): Psr7Response {
@@ -164,48 +158,56 @@ final class RestClientBuilderTest extends TestCase
 
         $this->expectException($expectExceptionClass);
 
-        RestClientBuilder::create(
+        $restClientBuilder = RestClientBuilder::create(
             new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
             new Client(['handler' => $mock]),
-        )
-            ->createUserStatusClient()
-            ->getPublicOfficialPersonStatus('someAccessToken')
-        ;
+        );
+
+        $callable($restClientBuilder);
     }
 
-    public static function clientErrorMiddlewareDataProvider(): iterable
+    public static function errorMiddlewaresDataProvider(): iterable
     {
-        yield [Status::UNAUTHORIZED, '', UnauthorizedException::class];
+            $userStatusClient = static function (RestClientBuilder $restClientBuilder) {
+                return $restClientBuilder
+                    ->createUserStatusClient()
+                    ->getPublicOfficialPersonStatus('someAccessToken')
+                ;
+            };
 
-        yield [Status::FORBIDDEN, '', ForbiddenException::class];
+        $idClient = static function (RestClientBuilder $restClientBuilder) {
+                return $restClientBuilder
+                    ->createIdClient()
+                    ->getUser('someAccessToken')
+                ;
+            };
 
-        yield [Status::NOT_FOUND, '', NotFoundException::class];
+        $documentClient = static function (RestClientBuilder $restClientBuilder) {
+                return $restClientBuilder
+                    ->createDocumentClient()
+                    ->getSnils('someAccessToken')
+                ;
+            };
 
-        yield [Status::BAD_REQUEST, '', BadRequestException::class];
+        foreach ([$userStatusClient, $idClient, $documentClient] as $callable) {
+            yield [Status::UNAUTHORIZED, '', $callable, UnauthorizedException::class];
 
-        yield [Status::OK, '{}', NotFoundException::class];
-    }
+            yield [Status::FORBIDDEN, '', $callable, ForbiddenException::class];
 
-    /**
-     * @throws ClientException
-     */
-    public function testInternalServerMiddleware(): void
-    {
-        $this->expectException(InternalServerErrorException::class);
+            yield [Status::NOT_FOUND, '', $callable, NotFoundException::class];
 
-        $mock = MockHandler::createWithMiddleware([
-            static function (): Psr7Response {
-                return new Psr7Response(Status::INTERNAL_SERVER_ERROR);
-            },
-        ]);
+            yield [Status::BAD_REQUEST, '', $callable, BadRequestException::class];
 
-        RestClientBuilder::create(
-            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
-            new Client(['handler' => $mock]),
-        )
-            ->createUserStatusClient()
-            ->getPublicOfficialPersonStatus('someAccessToken')
-        ;
+            yield [Status::UNAVAILABLE_FOR_LEGAL_REASONS, '', $callable, BadRequestException::class];
+
+            yield [Status::INTERNAL_SERVER_ERROR, '', $callable, InternalServerErrorException::class];
+
+            yield [Status::NETWORK_AUTHENTICATION_REQUIRED, '', $callable, InternalServerErrorException::class];
+        }
+
+        foreach ([$userStatusClient, $documentClient] as $callable) {
+            yield [Status::OK, '{}', $callable, NotFoundException::class];
+        }
     }
 
     public function testSandboxBusinessClientMiddleware(): void

@@ -96,19 +96,15 @@ final readonly class AuthorizationUrlBuilder
      */
     public function build(): string
     {
-        $query = [
-            'client_id'     => $this->clientId,
-            'redirect_uri'  => $this->redirectUri,
-            'state'         => $this->state->jsonSerialize(),
-            'response_type' => $this->responseType,
-        ];
-
-        $query = array_filter($query, static fn ($value) => null !== $value);
-
         return sprintf(
             '%s/auth/authorize?%s',
             $this->baseUri,
-            http_build_query($query)
+            http_build_query([
+                'client_id'     => $this->clientId,
+                'redirect_uri'  => $this->redirectUri,
+                'state'         => $this->state->jsonSerialize(),
+                'response_type' => $this->responseType,
+            ])
         );
     }
 }

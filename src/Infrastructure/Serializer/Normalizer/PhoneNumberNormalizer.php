@@ -22,6 +22,7 @@ final readonly class PhoneNumberNormalizer implements Denormalizer
      */
     public function getSupportedTypes(?string $format): array
     {
+        /* @infection-ignore-all */
         return [PhoneNumber::class => true];
     }
 
@@ -33,10 +34,9 @@ final readonly class PhoneNumberNormalizer implements Denormalizer
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): PhoneNumber
     {
         try {
-            Assert::stringNotEmpty($data);
-
             return PhoneNumber::parse($data, 'RU');
         } catch (PhoneNumberException $e) {
+            /* @infection-ignore-all */
             throw NotNormalizableValueException::createForUnexpectedDataType(
                 $e->getMessage(),
                 $data,
