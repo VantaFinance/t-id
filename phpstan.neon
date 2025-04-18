@@ -3,6 +3,7 @@ parameters:
     tmpDir: var
     paths:
         - src
+        - tests
     excludePaths:
         - vendor
     exceptions:
