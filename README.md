@@ -66,7 +66,7 @@ $restUserStatusClient = $restClientBuilder
 ;
 
 $pairKey = PairKey::createSandboxPairKey();
- 
+
 $restDocumentClient->getAddress($pairKey->accessToken, AddressType::RESIDENCE_ADDRESS);
 ```
 

@@ -38,8 +38,8 @@ final readonly class PipelineMiddleware
             $response = $this->client->sendRequest($request);
 
 
-//            echo 'response: ' . $response->getStatusCode() . ' ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
-//            $response->getBody()->rewind();
+            //            echo 'response: ' . $response->getStatusCode() . ' ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
+            //            $response->getBody()->rewind();
 
             return $response;
         }
