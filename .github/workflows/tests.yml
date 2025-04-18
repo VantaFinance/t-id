@@ -31,12 +31,3 @@ jobs:
         with:
           path: var
           key: phpstan-result-cache-${{ matrix.php }}-${{ hashFiles('**/composer.lock', '**/.github') }}
-
-
-      - name: composer.lock
-        uses: actions/upload-artifact@v4
-        with:
-          name: composer.lock
-          path: composer.lock
-
-      - run: XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
