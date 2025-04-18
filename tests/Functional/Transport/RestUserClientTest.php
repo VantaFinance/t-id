@@ -19,6 +19,7 @@ use Vanta\Integration\TId\Response\AuthIntrospect;
 use Vanta\Integration\TId\Response\PairKey;
 use Vanta\Integration\TId\Response\User;
 use Vanta\Integration\TId\RestClientBuilder;
+use Vanta\Integration\TId\Struct\Scope;
 use Vanta\Integration\TId\Tests\Functional\Fixture\UserResponseFixture;
 use Yiisoft\Http\Method;
 
@@ -109,7 +110,7 @@ final class RestUserClientTest extends TestCase
                 assertEquals('token=someAccessToken', $request->getBody()->getContents());
                 assertEquals('Basic c29tZUNsaWVudElkOnNvbWVDbGllbnRTZWNyZXQ=', $request->getHeader('Authorization')[0]);
 
-                return new Psr7Response(body: '{"active":true,"scope":["some","scopes"],"client_id":"someClientId","token_type":"Bearer","exp":1585728196,"iat":1585684996,"sub":"someSub","aud":["some","aud"],"iss":"https://id.tbank.ru/"}');
+                return new Psr7Response(body: '{"active":true,"scope":["PROFILE","PHONE"],"client_id":"someClientId","token_type":"Bearer","exp":1585728196,"iat":1585684996,"sub":"someSub","aud":["some","aud"],"iss":"https://id.tbank.ru/"}');
             },
         ]);
 
@@ -124,7 +125,7 @@ final class RestUserClientTest extends TestCase
         assertEquals(
             new AuthIntrospect(
                 true,
-                ['some', 'scopes'],
+                [Scope::PROFILE, Scope::PHONE],
                 'someClientId',
                 'Bearer',
                 new DateTimeImmutable('2020-04-01T08:03:16'),

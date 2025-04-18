@@ -8,16 +8,17 @@ use DateTimeImmutable;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Vanta\Integration\TId\Struct\Scope;
 
 final readonly class AuthIntrospect
 {
     /**
-     * @param list<non-empty-string> $scope
-     * @param non-empty-string       $clientId
-     * @param non-empty-string       $tokenType
-     * @param non-empty-string       $sub
-     * @param array<string>          $aud
-     * @param non-empty-string       $iss
+     * @param non-empty-list<Scope> $scope
+     * @param non-empty-string      $clientId
+     * @param non-empty-string      $tokenType
+     * @param non-empty-string      $sub
+     * @param array<string>         $aud
+     * @param non-empty-string      $iss
      */
     public function __construct(
         public bool $active,
