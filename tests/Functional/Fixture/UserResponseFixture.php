@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Vanta\Integration\TId\Tests\Functional\Fixture;
 
 use Brick\PhoneNumber\PhoneNumber;
-use Vanta\Integration\TId\Response\Document;
+use DateTimeImmutable;
 use Vanta\Integration\TId\Response\User;
-use Vanta\Integration\TId\Struct\Address;
-use Vanta\Integration\TId\Struct\AddressType;
-use Vanta\Integration\TId\Struct\DocumentType;
 use Vanta\Integration\TId\Struct\Gender;
-use Vanta\Integration\TId\Struct\MaritalStatus;
+
 use function Vanta\Integration\TId\Tests\Unit\fileGetJsonContents;
 
 final readonly class UserResponseFixture
@@ -23,7 +20,7 @@ final readonly class UserResponseFixture
             'someSub',
             'Иванов Василий',
             Gender::MALE,
-            new \DateTimeImmutable('02.11.1992'),
+            new DateTimeImmutable('02.11.1992'),
             'Иванов',
             'Василий',
             'Петрович',

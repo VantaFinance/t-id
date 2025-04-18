@@ -7,26 +7,19 @@ namespace Vanta\Integration\TId\Tests\Functional\Transport;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response as Psr7Response;
+
+use function PHPUnit\Framework\assertEquals;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Psr\Http\Message\RequestInterface as Request;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as Normalizer;
-use Symfony\Component\Uid\Uuid;
 use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
 use Vanta\Integration\TId\Response\AuthIntrospect;
-use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Response\PairKey;
 use Vanta\Integration\TId\Response\User;
 use Vanta\Integration\TId\RestClientBuilder;
-use Vanta\Integration\TId\Tests\Functional\Fixture\DocumentResponseFixture;
 use Vanta\Integration\TId\Tests\Functional\Fixture\UserResponseFixture;
 use Yiisoft\Http\Method;
-use Yiisoft\Http\Status;
-
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertJsonStringEqualsJsonString;
-use function PHPUnit\Framework\assertTrue;
 
 final class RestIdClientTest extends TestCase
 {

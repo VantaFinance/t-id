@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\TId\Tests\Unit;
 
-use Brick\PhoneNumber\PhoneNumber;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Promise\Create;
-use GuzzleHttp\Promise\PromiseInterface as Promise;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use GuzzleHttp\Psr7\Utils;
-use LogicException;
-use phpDocumentor\Reflection\Types\Integer;
+
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertNotEquals;
+use function PHPUnit\Framework\assertTrue;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientExceptionInterface as ClientException;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Uid\Uuid;
-use Throwable;
 use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\BadRequestException;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\ForbiddenException;
@@ -30,18 +26,9 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\NotFoundException;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Exception\UnauthorizedException;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\Middleware;
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\SandboxBusinessClientMiddleware;
-use Vanta\Integration\TId\Response\User;
 use Vanta\Integration\TId\RestClientBuilder;
 use Vanta\Integration\TId\Tests\Functional\Fixture\UserResponseFixture;
-use Yiisoft\Http\Method;
 use Yiisoft\Http\Status;
-
-use function PHPUnit\Framework\assertArrayHasKey;
-use function PHPUnit\Framework\assertContainsOnlyInstancesOf;
-use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertInstanceOf;
-use function PHPUnit\Framework\assertNotEquals;
-use function PHPUnit\Framework\assertTrue;
 
 final class RestClientBuilderTest extends TestCase
 {
@@ -100,7 +87,7 @@ final class RestClientBuilderTest extends TestCase
                 assertEquals('https://id.tbank.ru/userinfo/userinfo', $request->getUri()->__toString());
                 assertEquals('someTestHeaderValue', $request->getHeader('someTestHeaderName')[0]);
 
-                $callCount++;
+                ++$callCount;
 
                 return new Psr7Response(status: Status::OK, body: UserResponseFixture::getUserResponseFullSerialized());
             },
@@ -108,16 +95,16 @@ final class RestClientBuilderTest extends TestCase
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/pdl/status', $request->getUri()->__toString());
                 assertEquals('someTestHeaderValue', $request->getHeader('someTestHeaderName')[0]);
 
-                $callCount++;
+                ++$callCount;
 
                 return new Psr7Response(status: Status::OK, body: '{"isPublicOfficialPerson":true}');
             },
         ]);
 
         $clientBuilder = RestClientBuilder::create(
-                new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
-                new Client(['handler' => $mock]),
-            )
+            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
+            new Client(['handler' => $mock]),
+        )
             ->addMiddleware(new class() implements Middleware {
                 public function process(Request $request, ConfigurationClient $configuration, callable $next): Response
                 {
@@ -125,7 +112,6 @@ final class RestClientBuilderTest extends TestCase
 
                     return $next($request, $configuration);
                 }
-
             })
         ;
 
@@ -143,17 +129,16 @@ final class RestClientBuilderTest extends TestCase
     }
 
     /**
-     * @param positive-int $statusCode
+     * @param positive-int     $statusCode
      * @param non-empty-string $expectExceptionClass
+     *
      * @throws ClientException
      */
     #[DataProvider('errorMiddlewaresDataProvider')]
     public function testErrorMiddlewares(int $statusCode, string $responseContent, callable $callable, string $expectExceptionClass): void
     {
         $mock = MockHandler::createWithMiddleware([
-            static function () use ($statusCode, $responseContent): Psr7Response {
-                return new Psr7Response(status: $statusCode, body: $responseContent);
-            },
+            static fn (): Psr7Response => new Psr7Response(status: $statusCode, body: $responseContent),
         ]);
 
         $this->expectException($expectExceptionClass);
@@ -168,26 +153,20 @@ final class RestClientBuilderTest extends TestCase
 
     public static function errorMiddlewaresDataProvider(): iterable
     {
-            $userStatusClient = static function (RestClientBuilder $restClientBuilder) {
-                return $restClientBuilder
-                    ->createUserStatusClient()
-                    ->getPublicOfficialPersonStatus('someAccessToken')
-                ;
-            };
+        $userStatusClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder
+                ->createUserStatusClient()
+                ->getPublicOfficialPersonStatus('someAccessToken')
+        ;
 
-        $idClient = static function (RestClientBuilder $restClientBuilder) {
-                return $restClientBuilder
+        $idClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder
                     ->createIdClient()
                     ->getUser('someAccessToken')
-                ;
-            };
+        ;
 
-        $documentClient = static function (RestClientBuilder $restClientBuilder) {
-                return $restClientBuilder
+        $documentClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder
                     ->createDocumentClient()
                     ->getSnils('someAccessToken')
-                ;
-            };
+        ;
 
         foreach ([$userStatusClient, $idClient, $documentClient] as $callable) {
             yield [Status::UNAUTHORIZED, '', $callable, UnauthorizedException::class];

@@ -7,21 +7,14 @@ namespace Vanta\Integration\TId\Tests\Functional\Transport;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response as Psr7Response;
-use PHPUnit\Framework\Attributes\CoversNothing;
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Client\ClientExceptionInterface as ClientException;
-use Psr\Http\Message\RequestInterface as Request;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
-use Symfony\Component\Uid\Uuid;
-use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
-use Vanta\Integration\TId\Response\AuthIntrospect;
-use Vanta\Integration\TId\RestClientBuilder;
-use Yiisoft\Http\Method;
-use Yiisoft\Http\Status;
 
 use function PHPUnit\Framework\assertEquals;
-use function PHPUnit\Framework\assertJsonStringEqualsJsonString;
-use function PHPUnit\Framework\assertTrue;
+
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface as Request;
+use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
+use Vanta\Integration\TId\RestClientBuilder;
+use Yiisoft\Http\Method;
 
 final class RestUserStatusClientTest extends TestCase
 {

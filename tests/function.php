@@ -7,7 +7,8 @@ namespace Vanta\Integration\TId\Tests\Unit;
 use RuntimeException;
 
 /**
- * @param  non-empty-string $path
+ * @param non-empty-string $path
+ *
  * @return non-empty-string
  *
  * @throws RuntimeException

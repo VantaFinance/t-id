@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Vanta\Integration\TId\Tests\Unit\Infrastructure\Serializer;
 
 use Brick\PhoneNumber\PhoneNumber;
-use Brick\PhoneNumber\PhoneNumberParseException;
+use DateTimeImmutable;
+
+use function PHPUnit\Framework\assertEquals;
+
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 use Symfony\Component\Serializer\Exception\ExceptionInterface as Exception;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
-
 use Vanta\Integration\TId\Infrastructure\Serializer\Normalizer\PhoneNumberNormalizer;
-use function PHPUnit\Framework\assertEquals;
 
 final class PhoneNumberNormalizerTest extends TestCase
 {
@@ -41,12 +41,25 @@ final class PhoneNumberNormalizerTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testFailDenormalize(): void
+    #[DataProvider('failDenormalizeDataProvider')]
+    public function testFailDenormalize(mixed $phoneNumber, \Exception $expectedException): void
     {
-        $this->expectExceptionObject(new UnexpectedValueException('The string supplied did not seem to be a phone number.'));
+        $this->expectExceptionObject($expectedException);
 
         $normalizer = new PhoneNumberNormalizer();
 
-        $normalizer->denormalize('pos', PhoneNumber::class);
+        $normalizer->denormalize($phoneNumber, PhoneNumber::class);
+    }
+
+    /**
+     * @return iterable<array{0: bool, 1: ?string, 2: scalar }>
+     */
+    public static function failDenormalizeDataProvider(): iterable
+    {
+        yield ['pos', new UnexpectedValueException('The string supplied did not seem to be a phone number')];
+        yield [123, new UnexpectedValueException('Expected a string. Got: integer')];
+        yield [1.23, new UnexpectedValueException('Expected a string. Got: double')];
+        yield [false, new UnexpectedValueException('Expected a string. Got: boolean')];
+        yield [new DateTimeImmutable(), new UnexpectedValueException('Expected a string. Got: DateTimeImmutable')];
     }
 }

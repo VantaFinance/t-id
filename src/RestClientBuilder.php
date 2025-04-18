@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Vanta\Integration\TId;
 
 use Psr\Http\Client\ClientInterface as PsrHttpClient;
-use Symfony\Component\PropertyInfo\Extractor\PhpStanExtractor;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder as JsonEncoderSymfony;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;

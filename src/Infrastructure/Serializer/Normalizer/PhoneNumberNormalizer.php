@@ -8,10 +8,9 @@ use Brick\PhoneNumber\PhoneNumber;
 use Brick\PhoneNumber\PhoneNumberException;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface as Denormalizer;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface as Normalizer;
 use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 
 final readonly class PhoneNumberNormalizer implements Denormalizer
 {
@@ -34,8 +33,10 @@ final readonly class PhoneNumberNormalizer implements Denormalizer
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): PhoneNumber
     {
         try {
+            Assert::string($data);
+
             return PhoneNumber::parse($data, 'RU');
-        } catch (PhoneNumberException $e) {
+        } catch (InvalidArgumentException|PhoneNumberException $e) {
             /* @infection-ignore-all */
             throw NotNormalizableValueException::createForUnexpectedDataType(
                 $e->getMessage(),

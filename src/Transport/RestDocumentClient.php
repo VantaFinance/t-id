@@ -7,7 +7,6 @@ namespace Vanta\Integration\TId\Transport;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as Normalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
 use Symfony\Component\Uid\Uuid;

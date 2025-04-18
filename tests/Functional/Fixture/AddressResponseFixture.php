@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\TId\Tests\Functional\Fixture;
 
-use Vanta\Integration\TId\Response\Document;
 use Vanta\Integration\TId\Struct\Address;
 use Vanta\Integration\TId\Struct\AddressType;
-use Vanta\Integration\TId\Struct\DocumentType;
-use Vanta\Integration\TId\Struct\MaritalStatus;
+
 use function Vanta\Integration\TId\Tests\Unit\fileGetJsonContents;
 
 final readonly class AddressResponseFixture

@@ -7,8 +7,10 @@ namespace Vanta\Integration\TId\Tests\Functional\Transport;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response as Psr7Response;
+
+use function PHPUnit\Framework\assertEquals;
+
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface as Request;
 use Symfony\Component\Uid\Uuid;
@@ -24,8 +26,6 @@ use Vanta\Integration\TId\Tests\Functional\Fixture\AddressResponseFixture;
 use Vanta\Integration\TId\Tests\Functional\Fixture\DocumentResponseFixture;
 use Webmozart\Assert\InvalidArgumentException;
 use Yiisoft\Http\Method;
-
-use function PHPUnit\Framework\assertEquals;
 
 final class RestDocumentClientTest extends TestCase
 {
@@ -76,7 +76,7 @@ final class RestDocumentClientTest extends TestCase
     }
 
     /**
-     * @param list<Address> $responseExpected
+     * @param list<Address>    $responseExpected
      * @param non-empty-string $responseSerialized
      */
     #[DataProvider('getAddressDataProvider')]
@@ -186,14 +186,14 @@ final class RestDocumentClientTest extends TestCase
 
                 return new Psr7Response(body: '{"inn":"123456789012"}');
             },
-            static fn(): Psr7Response => new Psr7Response(body: '{"inn":"12345678"}'),
+            static fn (): Psr7Response => new Psr7Response(body: '{"inn":"12345678"}'),
         ]);
 
-         $documentClient = RestClientBuilder::create(
-                new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
-                new Client(['handler' => $mock]),
-            )
-            ->createDocumentClient()
+        $documentClient = RestClientBuilder::create(
+            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
+            new Client(['handler' => $mock]),
+        )
+           ->createDocumentClient()
         ;
 
         assertEquals(new InnNumber('123456789012'), $documentClient->getInn('someAccessToken', $xRequestId));
@@ -216,13 +216,13 @@ final class RestDocumentClientTest extends TestCase
 
                 return new Psr7Response(body: '{"snils":"12345678901"}');
             },
-            static fn(): Psr7Response => new Psr7Response(body: '{"snils":"12345678"}'),
+            static fn (): Psr7Response => new Psr7Response(body: '{"snils":"12345678"}'),
         ]);
 
         $documentClient = RestClientBuilder::create(
-                new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
-                new Client(['handler' => $mock]),
-            )
+            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
+            new Client(['handler' => $mock]),
+        )
             ->createDocumentClient()
         ;
 

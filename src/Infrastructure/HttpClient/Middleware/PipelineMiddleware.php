@@ -31,15 +31,15 @@ final readonly class PipelineMiddleware
 
         // @todo выкосить echo
         if (null == $middleware) {
-//            echo 'request: ' . $request->getMethod() . ' ' . $request->getUri()->__toString() . ' ' . $request->getBody()->getContents() . PHP_EOL;
-//            $request->getBody()->rewind();
+            //            echo 'request: ' . $request->getMethod() . ' ' . $request->getUri()->__toString() . ' ' . $request->getBody()->getContents() . PHP_EOL;
+            //            $request->getBody()->rewind();
 
 
             $response = $this->client->sendRequest($request);
 
 
-//            echo 'response: ' . $response->getStatusCode() . ' ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
-//            $response->getBody()->rewind();
+            //            echo 'response: ' . $response->getStatusCode() . ' ' . $response->getBody()->getContents() . PHP_EOL . PHP_EOL . PHP_EOL;
+            //            $response->getBody()->rewind();
 
             return $response;
         }
