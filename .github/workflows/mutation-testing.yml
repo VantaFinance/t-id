@@ -23,6 +23,8 @@ jobs:
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony }}
         uses: ramsey/composer-install@v1
+        with:
+          dependency-versions: "highest"
 
       - name: Load cache
         uses: actions/cache@v3
