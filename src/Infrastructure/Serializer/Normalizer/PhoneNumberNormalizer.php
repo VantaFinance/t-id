@@ -49,7 +49,6 @@ final readonly class PhoneNumberNormalizer implements Denormalizer
     }
 
     /**
-     * @param non-empty-string|null $type
      * @param non-empty-string|null $format
      * @param array<string, mixed>  $context
      */

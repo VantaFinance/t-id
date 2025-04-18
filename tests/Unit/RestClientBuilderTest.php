@@ -72,7 +72,7 @@ final class RestClientBuilderTest extends TestCase
             new Client(),
         );
 
-        assertNotEquals(spl_object_id($builder), spl_object_id($builder->withMiddlewares([])));
+        assertNotEquals(spl_object_id($builder), spl_object_id($builder->withMiddlewares([new SandboxBusinessClientMiddleware()])));
     }
 
     /**
@@ -129,10 +129,9 @@ final class RestClientBuilderTest extends TestCase
     }
 
     /**
-     * @param positive-int     $statusCode
-     * @param non-empty-string $expectExceptionClass
-     *
-     * @throws ClientException
+     * @param positive-int                      $statusCode
+     * @param callable(RestClientBuilder): void $callable
+     * @param class-string<ClientException>     $expectExceptionClass
      */
     #[DataProvider('errorMiddlewaresDataProvider')]
     public function testErrorMiddlewares(int $statusCode, string $responseContent, callable $callable, string $expectExceptionClass): void
@@ -151,6 +150,9 @@ final class RestClientBuilderTest extends TestCase
         $callable($restClientBuilder);
     }
 
+    /**
+     * @return iterable<array{0: positive-int, 1: string, 2: callable(RestClientBuilder): mixed, 3: class-string<ClientException>}>
+     */
     public static function errorMiddlewaresDataProvider(): iterable
     {
         $userStatusClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder

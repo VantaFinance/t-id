@@ -158,7 +158,7 @@ final class RestDocumentClientTest extends TestCase
     }
 
     /**
-     * @return iterable<array{0: Address, 1: non-empty-string}>
+     * @return iterable<array{0: bool, 1: non-empty-string}>
      */
     public static function getPassportCheckSmevResultProvider(): iterable
     {

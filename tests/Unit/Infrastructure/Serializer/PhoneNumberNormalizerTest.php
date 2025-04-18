@@ -52,7 +52,7 @@ final class PhoneNumberNormalizerTest extends TestCase
     }
 
     /**
-     * @return iterable<array{0: bool, 1: ?string, 2: scalar }>
+     * @return iterable<array{0: mixed, 1: UnexpectedValueException }>
      */
     public static function failDenormalizeDataProvider(): iterable
     {
@@ -60,6 +60,7 @@ final class PhoneNumberNormalizerTest extends TestCase
         yield [123, new UnexpectedValueException('Expected a string. Got: integer')];
         yield [1.23, new UnexpectedValueException('Expected a string. Got: double')];
         yield [false, new UnexpectedValueException('Expected a string. Got: boolean')];
+        yield [null, new UnexpectedValueException('Expected a string. Got: NULL')];
         yield [new DateTimeImmutable(), new UnexpectedValueException('Expected a string. Got: DateTimeImmutable')];
     }
 }
