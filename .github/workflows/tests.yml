@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.3 ]
-        symfony: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*' ]
+        symfony: ['7.1.*' ]
     steps:
       - uses: actions/checkout@v3.3.0
 
@@ -31,5 +31,11 @@ jobs:
         with:
           path: var
           key: phpstan-result-cache-${{ matrix.php }}-${{ hashFiles('**/composer.lock', '**/.github') }}
+
+      - name: composer.lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer.lock2
+          path: composer.lock
 
       - run: XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
