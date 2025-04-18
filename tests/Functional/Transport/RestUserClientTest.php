@@ -32,14 +32,24 @@ final class RestUserClientTest extends TestCase
                 assertEquals(Method::POST, $request->getMethod());
                 assertEquals('https://id.tbank.ru/auth/token', $request->getUri()->__toString());
                 assertEquals('grant_type=authorization_code&redirect_uri=https%3A%2F%2Fvanta.ru&code=someCode', $request->getBody()->getContents());
-                assertEquals('Basic c29tZUNsaWVudElkOnNvbWVDbGllbnRTZWNyZXQ=', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'     => ['GuzzleHttp/7'],
+                        'Host'           => ['id.tbank.ru'],
+                        'Authorization'  => ['Basic c29tZUNsaWVudElkOnNvbWVDbGllbnRTZWNyZXQ='],
+                        'Accept'         => ['application/json'],
+                        'Content-Length' => [79],
+                        'Content-Type'   => ['application/x-www-form-urlencoded'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"access_token":"someAccessToken","token_type":"Bearer","expires_in":1800,"id_token":"someIdToken"}');
             },
         ]);
 
         $responseActual = RestClientBuilder::create(
-            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
+            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://id.tbank'),
             new Client(['handler' => $mock]),
         )
             ->createUserClient()
@@ -68,14 +78,24 @@ final class RestUserClientTest extends TestCase
                 assertEquals(Method::POST, $request->getMethod());
                 assertEquals('https://id.tbank.ru/userinfo/userinfo', $request->getUri()->__toString());
                 assertEquals('client_id=someClientId&client_secret=someClientSecret', $request->getBody()->getContents());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'     => ['GuzzleHttp/7'],
+                        'Host'           => ['id.tbank.ru'],
+                        'Authorization'  => ['Bearer someAccessToken'],
+                        'Accept'         => ['application/json'],
+                        'Content-Length' => [53],
+                        'Content-Type'   => ['application/x-www-form-urlencoded'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: $responseSerialized);
             },
         ]);
 
         $responseActual = RestClientBuilder::create(
-            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://business.tbank.ru'),
+            new ConfigurationClient('someClientId', 'someClientSecret', 'https://id.tbank.ru', 'https://id.tbank'),
             new Client(['handler' => $mock]),
         )
             ->createUserClient()
@@ -108,7 +128,17 @@ final class RestUserClientTest extends TestCase
                 assertEquals(Method::POST, $request->getMethod());
                 assertEquals('https://id.tbank.ru/auth/introspect', $request->getUri()->__toString());
                 assertEquals('token=someAccessToken', $request->getBody()->getContents());
-                assertEquals('Basic c29tZUNsaWVudElkOnNvbWVDbGllbnRTZWNyZXQ=', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'     => ['GuzzleHttp/7'],
+                        'Host'           => ['id.tbank.ru'],
+                        'Authorization'  => ['Basic c29tZUNsaWVudElkOnNvbWVDbGllbnRTZWNyZXQ='],
+                        'Accept'         => ['application/json'],
+                        'Content-Length' => [21],
+                        'Content-Type'   => ['application/x-www-form-urlencoded'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"active":true,"scope":["PROFILE","PHONE"],"client_id":"someClientId","token_type":"Bearer","exp":1585728196,"iat":1585684996,"sub":"someSub","aud":["some","aud"],"iss":"https://id.tbank.ru/"}');
             },

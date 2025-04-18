@@ -41,8 +41,16 @@ final class RestDocumentClientTest extends TestCase
             static function (Request $request) use ($responseSerialized, $xRequestId): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/documents/passport?idType=PASSPORT', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
-                assertEquals($xRequestId->jsonSerialize(), $request->getHeader('X-Request-Id')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                        'X-Request-Id'  => [$xRequestId->jsonSerialize()],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: $responseSerialized);
             },
@@ -88,8 +96,16 @@ final class RestDocumentClientTest extends TestCase
             static function (Request $request) use ($responseSerialized, $xRequestId): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/addresses?addressType=REGISTRATION_ADDRESS', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
-                assertEquals($xRequestId->jsonSerialize(), $request->getHeader('X-Request-Id')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                        'X-Request-Id'  => [$xRequestId->jsonSerialize()],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: $responseSerialized);
             },
@@ -139,8 +155,16 @@ final class RestDocumentClientTest extends TestCase
             static function (Request $request) use ($responseSerialized, $xRequestId): Psr7Response {
                 assertEquals(Method::POST, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/documents/passport-check-smev4', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
-                assertEquals($xRequestId->jsonSerialize(), $request->getHeader('X-Request-Id')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                        'X-Request-Id'  => [$xRequestId->jsonSerialize()],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: $responseSerialized);
             },
@@ -181,8 +205,16 @@ final class RestDocumentClientTest extends TestCase
             static function (Request $request) use ($xRequestId): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/documents/inn', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
-                assertEquals($xRequestId->jsonSerialize(), $request->getHeader('X-Request-Id')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                        'X-Request-Id'  => [$xRequestId->jsonSerialize()],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"inn":"123456789012"}');
             },
@@ -211,8 +243,16 @@ final class RestDocumentClientTest extends TestCase
             static function (Request $request) use ($xRequestId): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/documents/snils', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
-                assertEquals($xRequestId->jsonSerialize(), $request->getHeader('X-Request-Id')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                        'X-Request-Id'  => [$xRequestId->jsonSerialize()],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"snils":"12345678901"}');
             },

@@ -24,7 +24,15 @@ final class RestUserStatusClientTest extends TestCase
             static function (Request $request): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/foreignagent/status', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"isForeignAgent":true}');
             },
@@ -47,7 +55,15 @@ final class RestUserStatusClientTest extends TestCase
             static function (Request $request): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/blacklist/status', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"isBlacklisted":true}');
             },
@@ -70,7 +86,15 @@ final class RestUserStatusClientTest extends TestCase
             static function (Request $request): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/identification/status', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"isIdentified":true}');
             },
@@ -93,7 +117,15 @@ final class RestUserStatusClientTest extends TestCase
             static function (Request $request): Psr7Response {
                 assertEquals(Method::GET, $request->getMethod());
                 assertEquals('https://business.tbank.ru/openapi/api/v1/individual/pdl/status', $request->getUri()->__toString());
-                assertEquals('Bearer someAccessToken', $request->getHeader('Authorization')[0]);
+                assertEquals(
+                    [
+                        'User-Agent'    => ['GuzzleHttp/7'],
+                        'Host'          => ['business.tbank.ru'],
+                        'Authorization' => ['Bearer someAccessToken'],
+                        'Accept'        => ['application/json'],
+                    ],
+                    $request->getHeaders()
+                );
 
                 return new Psr7Response(body: '{"isPublicOfficialPerson":true}');
             },
