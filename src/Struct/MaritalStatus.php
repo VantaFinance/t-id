@@ -12,4 +12,5 @@ enum MaritalStatus: string
     case MARRIED         = 'MARRIED';
     case SINGLE          = 'SINGLE';
     case WIDOWED         = 'WIDOWED';
+    case TEST_VALUE      = 'Женат/замужем'; // встречается только на тестовом контуре
 }

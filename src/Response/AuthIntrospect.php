@@ -13,6 +13,9 @@ use Vanta\Integration\TId\Struct\Scope;
 final readonly class AuthIntrospect
 {
     /**
+     * На тестовом контуре возвращает только поле active, на prod-е - все поля,
+     * решили сделать без nullable
+     *
      * @param non-empty-list<Scope> $scope
      * @param non-empty-string      $clientId
      * @param non-empty-string      $tokenType

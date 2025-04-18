@@ -140,7 +140,7 @@ final class RestUserClientTest extends TestCase
                     $request->getHeaders()
                 );
 
-                return new Psr7Response(body: '{"active":true,"scope":["PROFILE","PHONE"],"client_id":"someClientId","token_type":"Bearer","exp":1585728196,"iat":1585684996,"sub":"someSub","aud":["some","aud"],"iss":"https://id.tbank.ru/"}');
+                return new Psr7Response(body: '{"active":true,"scope":["profile","phone"],"client_id":"someClientId","token_type":"Bearer","exp":1585728196,"iat":1585684996,"sub":"someSub","aud":["some","aud"],"iss":"https://id.tbank.ru/"}');
             },
         ]);
 
