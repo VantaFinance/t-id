@@ -47,28 +47,28 @@ final readonly class ConfigurationClient
     }
 
     /**
-     * @param non-empty-string $idClientUrl
+     * @param non-empty-string $idApiUrl
      */
-    public function withIdClientUrl(string $idClientUrl): self
+    public function withIdApiUrl(string $idApiUrl): self
     {
         return new self(
             clientId: $this->clientId,
             clientSecret: $this->clientSecret,
-            idApiUrl: $idClientUrl,
+            idApiUrl: $idApiUrl,
             businessApiUrl: $this->businessApiUrl,
         );
     }
 
     /**
-     * @param non-empty-string $businessClientUrl
+     * @param non-empty-string $businessApiUrl
      */
-    public function withBusinessClientUrl(string $businessClientUrl): self
+    public function withBusinessApiUrl(string $businessApiUrl): self
     {
         return new self(
             clientId: $this->clientId,
             clientSecret: $this->clientSecret,
             idApiUrl: $this->idApiUrl,
-            businessApiUrl: $businessClientUrl,
+            businessApiUrl: $businessApiUrl,
         );
     }
 }

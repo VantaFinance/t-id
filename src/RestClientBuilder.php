@@ -29,7 +29,7 @@ use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\PipelineMiddlewar
 use Vanta\Integration\TId\Infrastructure\HttpClient\Middleware\UrlMiddleware;
 use Vanta\Integration\TId\Infrastructure\Serializer\Normalizer\PhoneNumberNormalizer;
 use Vanta\Integration\TId\Transport\RestDocumentClient;
-use Vanta\Integration\TId\Transport\RestIdClient;
+use Vanta\Integration\TId\Transport\RestUserClient;
 use Vanta\Integration\TId\Transport\RestUserStatusClient;
 
 final readonly class RestClientBuilder
@@ -147,9 +147,9 @@ final readonly class RestClientBuilder
         );
     }
 
-    public function createIdClient(): IdClient
+    public function createUserClient(): UserClient
     {
-        return new RestIdClient(
+        return new RestUserClient(
             new HttpClient(
                 $this->configuration,
                 new PipelineMiddleware($this->middlewaresIdApi, $this->client),

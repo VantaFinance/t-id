@@ -29,14 +29,14 @@ final class ConfigurationClientTest extends TestCase
             $configurationClient,
         );
 
-        $configurationClient = $configurationClient->withIdClientUrl('https://id.tbank2.ru');
+        $configurationClient = $configurationClient->withIdApiUrl('https://id.tbank2.ru');
 
         assertEquals(
             new ConfigurationClient('someOtherClientId', 'someOtherClientSecret', 'https://id.tbank2.ru', 'https://business.tbank.ru'),
             $configurationClient,
         );
 
-        $configurationClient = $configurationClient->withBusinessClientUrl('https://business.tbank2.ru');
+        $configurationClient = $configurationClient->withBusinessApiUrl('https://business.tbank2.ru');
 
         assertEquals(
             new ConfigurationClient('someOtherClientId', 'someOtherClientSecret', 'https://id.tbank2.ru', 'https://business.tbank2.ru'),

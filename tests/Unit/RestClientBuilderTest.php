@@ -116,7 +116,7 @@ final class RestClientBuilderTest extends TestCase
         ;
 
         $clientBuilder
-            ->createIdClient()
+            ->createUserClient()
             ->getUser('someAccessToken')
         ;
 
@@ -160,8 +160,8 @@ final class RestClientBuilderTest extends TestCase
                 ->getPublicOfficialPersonStatus('someAccessToken')
         ;
 
-        $idClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder
-                    ->createIdClient()
+        $userClient = static fn (RestClientBuilder $restClientBuilder) => $restClientBuilder
+                    ->createUserClient()
                     ->getUser('someAccessToken')
         ;
 
@@ -170,7 +170,7 @@ final class RestClientBuilderTest extends TestCase
                     ->getSnils('someAccessToken')
         ;
 
-        foreach ([$userStatusClient, $idClient, $documentClient] as $callable) {
+        foreach ([$userStatusClient, $userClient, $documentClient] as $callable) {
             yield [Status::UNAUTHORIZED, '', $callable, UnauthorizedException::class];
 
             yield [Status::FORBIDDEN, '', $callable, ForbiddenException::class];

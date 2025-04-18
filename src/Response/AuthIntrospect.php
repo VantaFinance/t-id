@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\TId\Response;
 
+use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 final readonly class AuthIntrospect
 {
@@ -25,8 +27,10 @@ final readonly class AuthIntrospect
         public string $clientId,
         #[SerializedName('token_type')]
         public string $tokenType,
-        public int $exp,
-        public int $iat,
+        #[Context([DateTimeNormalizer::FORMAT_KEY => 'U'])]
+        public \DateTimeImmutable $exp,
+        #[Context([DateTimeNormalizer::FORMAT_KEY => 'U'])]
+        public \DateTimeImmutable $iat,
         public string $sub,
         public array $aud,
         public string $iss,

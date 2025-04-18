@@ -9,7 +9,7 @@ use Vanta\Integration\TId\Response\AuthIntrospect;
 use Vanta\Integration\TId\Response\PairKey;
 use Vanta\Integration\TId\Response\User;
 
-interface IdClient
+interface UserClient
 {
     /**
      * @param non-empty-string $code        - get параметр code, из url-а, на который вернулся пользователь после авторизации в t-банке

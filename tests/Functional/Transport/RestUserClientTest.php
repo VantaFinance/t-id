@@ -21,7 +21,7 @@ use Vanta\Integration\TId\RestClientBuilder;
 use Vanta\Integration\TId\Tests\Functional\Fixture\UserResponseFixture;
 use Yiisoft\Http\Method;
 
-final class RestIdClientTest extends TestCase
+final class RestUserClientTest extends TestCase
 {
     public function testGetPairKeyByAuthorizationCode(): void
     {
@@ -126,8 +126,8 @@ final class RestIdClientTest extends TestCase
                 ['some', 'scopes'],
                 'someClientId',
                 'Bearer',
-                1585728196,
-                1585684996,
+                new \DateTimeImmutable('2020-04-01T08:03:16'),
+                new \DateTimeImmutable('2020-03-31T20:03:16'),
                 'someSub',
                 ['some', 'aud'],
                 'https://id.tbank.ru/'
