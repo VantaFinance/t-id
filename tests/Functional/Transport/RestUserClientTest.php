@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Vanta\Integration\TId\Tests\Functional\Transport;
 
+use DateTimeImmutable;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response as Psr7Response;
@@ -126,8 +127,8 @@ final class RestUserClientTest extends TestCase
                 ['some', 'scopes'],
                 'someClientId',
                 'Bearer',
-                new \DateTimeImmutable('2020-04-01T08:03:16'),
-                new \DateTimeImmutable('2020-03-31T20:03:16'),
+                new DateTimeImmutable('2020-04-01T08:03:16'),
+                new DateTimeImmutable('2020-03-31T20:03:16'),
                 'someSub',
                 ['some', 'aud'],
                 'https://id.tbank.ru/'

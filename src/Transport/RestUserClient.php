@@ -8,11 +8,11 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Client\ClientInterface as HttpClient;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer as Normalizer;
 use Symfony\Component\Serializer\SerializerInterface as Serializer;
-use Vanta\Integration\TId\UserClient;
 use Vanta\Integration\TId\Infrastructure\HttpClient\ConfigurationClient;
 use Vanta\Integration\TId\Response\AuthIntrospect;
 use Vanta\Integration\TId\Response\PairKey;
 use Vanta\Integration\TId\Response\User;
+use Vanta\Integration\TId\UserClient;
 use Yiisoft\Http\Method;
 
 final readonly class RestUserClient implements UserClient
