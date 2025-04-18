@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         php: [ 8.3 ]
-        symfony: [ '7.1.*' ]
+        symfony: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*' ]
     steps:
       - uses: actions/checkout@v3.3.0
 
