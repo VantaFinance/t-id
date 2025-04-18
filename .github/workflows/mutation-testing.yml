@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 jobs:
   stats-analysis:
     runs-on: ubuntu-latest
-    name: tests PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+    name: mutation testing PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
     strategy:
       matrix:
         php: [ 8.3 ]
