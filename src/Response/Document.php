@@ -14,7 +14,6 @@ final readonly class Document
      * @param non-empty-string      $rawValue
      * @param non-empty-string|null $birthPlace
      * @param non-empty-string|null $citizenship
-     * @param non-negative-int|null $numberOfChildren
      * @param non-empty-string|null $serialNumber
      * @param non-empty-string|null $unitCode
      * @param non-empty-string|null $unitName
