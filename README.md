@@ -27,7 +27,7 @@ $restDocumentClient = $restClientBuilder->createDocumentClient();
 $restUserStatusClient = $restClientBuilder->createUserStatusClient();
 ```
 
-Генерация URL для авторизации пользователя:
+## Генерация URL для авторизации пользователя:
 
 ```php
 use GuzzleHttp\Client;
@@ -40,7 +40,7 @@ RestClientBuilder::create(new ConfigurationClient('ваш ClientId', 'ваш Cli
 ;
 ```
 
-Получение данных о пользователе:
+## Получение данных о пользователе:
 
 ```php
 $pairKey = $restUserClient->getPairKeyByAuthorizationCode('get параметр code, из url-а, на который вернулся пользователь', 'ваш redirectUrl');
@@ -48,7 +48,7 @@ $pairKey = $restUserClient->getPairKeyByAuthorizationCode('get параметр 
 $restUserClient->getUser($pairKey->accessToken);
 ```
 
-Тестовая среда:
+## Тестовая среда:
 
 ```php
 use GuzzleHttp\Client;
