@@ -1,0 +1,47 @@
+name: Composer CI
+on: [ push, pull_request ]
+
+jobs:
+  composer-validate:
+    runs-on: ubuntu-latest
+    name: composer-validate PHP ${{ matrix.php }}
+    strategy:
+      matrix:
+        php: [ 8.3 ]
+    steps:
+      - uses: actions/checkout@v3.3.0
+
+      - name: Validate
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - run: composer validate --strict --ansi
+
+  composer-audit:
+    runs-on: ubuntu-latest
+    name: composer-audit PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+    strategy:
+      matrix:
+        php: [ 8.3 ]
+        symfony: [ '6.4.*', '7.1.*' ]
+    steps:
+      - uses: actions/checkout@v3.3.0
+
+      - name: Install Infrastructure
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, flex
+          coverage: none
+
+      - name: Install dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v1
+        with:
+          dependency-versions: "highest"
+
+      - run: composer audit

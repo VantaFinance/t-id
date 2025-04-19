@@ -1,0 +1,15 @@
+{
+    "idType": "PASSPORT",
+    "birthDate": "1993-02-06 12:59:59",
+    "birthPlace": "г. Новосибирск",
+    "citizenship": "РФ",
+    "issueDate": "2000-02-06 12:59:59",
+    "maritalStatus": "MARRIED",
+    "marriageDate": "2009-02-02 12:59:59",
+    "numberOfChildren": 0,
+    "resident": true,
+    "serialNumber": "123456",
+    "unitCode": "7890",
+    "unitName": "Уполномоченный орган",
+    "validTo": "2035-06-02 12:59:59"
+}

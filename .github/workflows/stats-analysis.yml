@@ -1,0 +1,33 @@
+name: Stats-Analysis CI
+on: [ push, pull_request ]
+
+jobs:
+  stats-analysis:
+    runs-on: ubuntu-latest
+    name: stats-analysis PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
+    strategy:
+      matrix:
+        php: [ 8.3 ]
+        symfony: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*' ]
+    steps:
+      - uses: actions/checkout@v3.3.0
+
+      - name: Install Infrastructure
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, flex
+          coverage: none
+
+      - name: Install dependencies
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony }}
+        uses: ramsey/composer-install@v1
+
+      - name: Load cache
+        uses: actions/cache@v3
+        with:
+          path: var
+          key: phpstan-result-cache-${{ matrix.php }}-${{ hashFiles('**/composer.lock', '**/.github') }}
+
+      - run: vendor/bin/phpstan --error-format=github

@@ -1,0 +1,42 @@
+{
+    "addresses": [
+        {
+            "addressType": "RESIDENCE_ADDRESS",
+            "apartment": "100",
+            "building":"111",
+            "city": "г Ярославль",
+            "claddrCode": "1200000600010530123",
+            "country": "Россия",
+            "district": "Ярославский округ",
+            "fiasCode": "567845f8-72vb-45f3-ad16-bd4d12e06162",
+            "house": "120",
+            "housing": "121",
+            "latitude": 57.1234,
+            "longitude": 39.5678,
+            "primary": false,
+            "region": "Ярославская обл",
+            "settlement": "Ярославль",
+            "street": "ул Правды",
+            "zipCode": "150001"
+        },
+        {
+            "addressType": "REGISTRATION_ADDRESS",
+            "apartment": "100",
+            "building":"111",
+            "city": "г Ярославль",
+            "claddrCode": "1200000600010530123",
+            "country": "Россия",
+            "district": "Ярославский округ",
+            "fiasCode": "567845f8-72vb-45f3-ad16-bd4d12e06162",
+            "house": "120",
+            "housing": "121",
+            "latitude": 57.1234,
+            "longitude": 39.5678,
+            "primary": false,
+            "region": "Ярославская обл",
+            "settlement": "Ярославль",
+            "street": "ул Правды",
+            "zipCode": "150001"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "sub": "someSub",
+    "name": "Иванов Василий",
+    "gender": "male",
+    "birthdate": "1992-11-02 12:59:59",
+    "family_name": "Иванов",
+    "given_name": "Василий",
+    "middle_name": "Петрович",
+    "phone_number": "+79612272828"
+}
