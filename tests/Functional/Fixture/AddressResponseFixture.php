@@ -12,7 +12,7 @@ use function Vanta\Integration\TId\Tests\Unit\fileGetJsonContents;
 final readonly class AddressResponseFixture
 {
     /**
-     * @return array{0: Address}
+     * @return array{0: Address, 1: Address}
      */
     public static function getAddressResponseFull(): array
     {

@@ -22,7 +22,9 @@ enum Scope: string
     case OPENSME_INDIVIDUAL_FOREIGNAGENT_STATUS_GET = 'opensme/individual/foreignagent/status/get';
     case OPENSME_INDIVIDUAL_BLACKLIST_STATUS_GET    = 'opensme/individual/blacklist/status/get';
 
-    // @todo узнать
+    // внутренние параметры т-банка, в дальнейшем могут удалиться
+    // @todo т.к. т-банк добавляет внутренние параметры, подумать о том, чтобы удалить этот enum,
+    // @todo иначе, при добавлении новых значений т-банком, можем получить неожиданную ошибку на prod-е
     case ORIGIN            = 'origin';
     case IRIS_RISK_SESSION = 'iris_risk_session';
     case OPENID            = 'openid';

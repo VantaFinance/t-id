@@ -2,13 +2,13 @@ name: Mutation testing CI
 on: [ push, pull_request ]
 
 jobs:
-  stats-analysis:
+  mutation-testing:
     runs-on: ubuntu-latest
     name: mutation testing PHP ${{ matrix.php }} and Symfony ${{ matrix.symfony }}
     strategy:
       matrix:
         php: [ 8.3 ]
-        symfony: [ '6.4.*', '7.0.*', '7.1.*', '7.2.*' ]
+        symfony: [ 7.2.*' ]
     steps:
       - uses: actions/checkout@v3.3.0
 
