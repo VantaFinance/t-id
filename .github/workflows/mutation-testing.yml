@@ -30,6 +30,6 @@ jobs:
         uses: actions/cache@v3
         with:
           path: var
-          key: phpstan-result-cache-${{ matrix.php }}-${{ hashFiles('**/composer.lock', '**/.github') }}
+          key: mutation-testing-result-cache-${{ matrix.php }}-${{ hashFiles('**/composer.lock', '**/.github') }}
 
       - run: XDEBUG_MODE=coverage ./vendor/bin/infection --threads=4 --show-mutations --only-covered
