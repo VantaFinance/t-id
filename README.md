@@ -78,3 +78,7 @@ $restDocumentClient->getAddress($pairKey->accessToken, AddressType::RESIDENCE_AD
 4. API т-банка в запросе $restUserClient->getAuthIntrospect($pairKey->accessToken);,
 на тесте возвращает только 1 поле: active, на prod-е возвращает все поля, решили сделать все поля ответа обязательными 
 ```
+
+## todo:
+1. Подумать о том, чтобы отказаться от enum-а src/Struct/Scope.php в пользу строк, т.к. т-банк добавляет в него внутренние значения,
+и мы можем получить неожиданную ошибку на prod-е
